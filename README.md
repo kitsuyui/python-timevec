@@ -1,5 +1,9 @@
 # timevec
 
+![python versions](https://img.shields.io/pypi/pyversions/timevec)
+![package version](https://img.shields.io/pypi/v/timevec)
+[![codecov](https://codecov.io/gh/kitsuyui/python-timevec/branch/main/graph/badge.svg?token=38BQRO1R00)](https://codecov.io/gh/kitsuyui/python-timevec)
+
 Functions to create time vectors
 
 # Description
