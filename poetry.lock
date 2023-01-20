@@ -290,7 +290,7 @@ files = [
 name = "numpy"
 version = "1.24.1"
 description = "Fundamental package for array computing in Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.8"
 files = [
@@ -532,4 +532,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "75769ee23c1e6af7f1c02555cd64f44cdf0c9baf105d05300c5fae6f00008bc3"
+content-hash = "251ee9dc60870ccc4662a891f76482fc6ac25e09cfd10dda9b20ec27e51a291e"

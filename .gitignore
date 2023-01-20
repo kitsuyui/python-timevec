@@ -241,3 +241,4 @@ cython_debug/
 #.idea/
 
 
+timevec/_version.py

@@ -3,14 +3,15 @@ line-length = 79
 
 [tool.poetry]
 name = "timevec"
-version = "0.1.0"
+version = "0.0.0"  # replace by poetry-dynamic-versioning
 description = ""
 authors = ["kitsuyui <kitsuyui@kitsuyui.com>"]
 readme = "README.md"
-packages = [{ include = "timevec", from = "./timevec" }]
+packages = [{ include = "timevec", from = "./" }]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+numpy = "^1.24.1"
 [tool.poetry.group.dev.dependencies]
 black = "*"
 pytest = "*"
@@ -23,8 +24,11 @@ poethepoet = "*"
 numpy = "^1.24.1"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = true
 
 [tool.poe.tasks]
 test = { shell = "python -m pytest" }
