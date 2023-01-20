@@ -10,7 +10,7 @@ readme = "README.md"
 packages = [{ include = "timevec", from = "./timevec" }]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 [tool.poetry.group.dev.dependencies]
 black = "*"
 pytest = "*"
@@ -20,6 +20,7 @@ pytest-cov = "*"
 flake8 = "*"
 mypy = "*"
 poethepoet = "*"
+numpy = "^1.24.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -31,7 +32,7 @@ coverage-xml = "python -m pytest --cov=timevec tests --doctest-modules --cov-rep
 format = { shell = """
 isort timevec tests &&
 black timevec tests &&
-pyupgrade --py37-plus timevec/*.py tests/*.py
+pyupgrade --py38-plus timevec/*.py tests/*.py
 """ }
 check = { shell = """
 isort --check-only --diff timevec tests &&
