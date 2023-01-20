@@ -1,0 +1,41 @@
+[tool.black]
+line-length = 79
+
+[tool.poetry]
+name = "timevec"
+version = "0.1.0"
+description = ""
+authors = ["kitsuyui <kitsuyui@kitsuyui.com>"]
+readme = "README.md"
+packages = [{ include = "timevec", from = "./timevec" }]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+[tool.poetry.group.dev.dependencies]
+black = "*"
+pytest = "*"
+isort = "*"
+pyupgrade = "*"
+pytest-cov = "*"
+flake8 = "*"
+mypy = "*"
+poethepoet = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+test = { shell = "python -m pytest" }
+coverage-xml = "python -m pytest --cov=timevec tests --doctest-modules --cov-report=xml"
+format = { shell = """
+isort timevec tests &&
+black timevec tests &&
+pyupgrade --py37-plus timevec/*.py tests/*.py
+""" }
+check = { shell = """
+isort --check-only --diff timevec tests &&
+black --check --diff timevec tests &&
+flake8 timevec tests &&
+mypy timevec tests
+""" }
