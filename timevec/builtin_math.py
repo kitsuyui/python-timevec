@@ -1,8 +1,9 @@
 import datetime
 import math
+from typing import Tuple
 
 
-def year_vec(dt: datetime.datetime) -> tuple[float, float]:
+def year_vec(dt: datetime.datetime) -> Tuple[float, float]:
     """Represent the elapsed time in the year as a vector"""
     begin_of_year = datetime.datetime.min.replace(year=dt.year)
     end_of_year = datetime.datetime.min.replace(year=dt.year + 1)
@@ -14,7 +15,7 @@ def year_vec(dt: datetime.datetime) -> tuple[float, float]:
     return x, y
 
 
-def month_vec(dt: datetime.datetime) -> tuple[float, float]:
+def month_vec(dt: datetime.datetime) -> Tuple[float, float]:
     """Represent the elapsed time in the month as a vector"""
     begin_of_month = datetime.datetime.min.replace(
         year=dt.year, month=dt.month
@@ -30,7 +31,7 @@ def month_vec(dt: datetime.datetime) -> tuple[float, float]:
     return x, y
 
 
-def week_vec(dt: datetime.datetime) -> tuple[float, float]:
+def week_vec(dt: datetime.datetime) -> Tuple[float, float]:
     """Represent the elapsed time in the week as a vector"""
     # weekday is 0 for Monday and 6 for Sunday
     current_time = (
@@ -46,7 +47,7 @@ def week_vec(dt: datetime.datetime) -> tuple[float, float]:
     return x, y
 
 
-def day_vec(dt: datetime.datetime) -> tuple[float, float]:
+def day_vec(dt: datetime.datetime) -> Tuple[float, float]:
     """Represent the elapsed time in the day as a vector"""
     begin_of_day = datetime.datetime.min.replace(
         year=dt.year, month=dt.month, day=dt.day
