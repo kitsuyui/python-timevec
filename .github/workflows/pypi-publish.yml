@@ -12,14 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - run: |
+          pip install poetry
+          poetry self add "poetry-dynamic-versioning[plugin]"
+
       - uses: actions/setup-python@v4
         with:
           python-version: "3.x"
           cache: "poetry"
-
-      - run: |
-          pip install poetry
-          poetry self add "poetry-dynamic-versioning[plugin]"
 
       - run: poetry install
 
