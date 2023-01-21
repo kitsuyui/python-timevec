@@ -83,4 +83,4 @@ You can express periodicity such as morning, noon, and night.
 
 # License
 
-MIT
+BSD 3-Clause License
