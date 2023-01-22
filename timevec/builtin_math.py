@@ -7,12 +7,8 @@ def year_vec(dt: datetime.datetime) -> Tuple[float, float]:
     """Represent the elapsed time in the year as a vector"""
     begin_of_year = datetime.datetime.min.replace(year=dt.year)
     end_of_year = datetime.datetime.min.replace(year=dt.year + 1)
-    year_seconds = (end_of_year - begin_of_year).total_seconds()
-    seconds_since_begin_of_year = (dt - begin_of_year).total_seconds()
-    rate = seconds_since_begin_of_year / year_seconds
-    x = math.cos(2 * math.pi * rate)
-    y = math.sin(2 * math.pi * rate)
-    return x, y
+    rate = time_elapsed_ratio(begin=begin_of_year, end=end_of_year, current=dt)
+    return ratio_to_vec(rate)
 
 
 def month_vec(dt: datetime.datetime) -> Tuple[float, float]:
@@ -23,28 +19,23 @@ def month_vec(dt: datetime.datetime) -> Tuple[float, float]:
     end_of_month = datetime.datetime.min.replace(
         year=dt.year, month=dt.month + 1
     )
-    month_seconds = (end_of_month - begin_of_month).total_seconds()
-    seconds_since_begin_of_month = (dt - begin_of_month).total_seconds()
-    rate = seconds_since_begin_of_month / month_seconds
-    x = math.cos(2 * math.pi * rate)
-    y = math.sin(2 * math.pi * rate)
-    return x, y
+    rate = time_elapsed_ratio(
+        begin=begin_of_month, end=end_of_month, current=dt
+    )
+    return ratio_to_vec(rate)
 
 
 def week_vec(dt: datetime.datetime) -> Tuple[float, float]:
     """Represent the elapsed time in the week as a vector"""
     # weekday is 0 for Monday and 6 for Sunday
-    current_time = (
-        dt.weekday() * 24 * 60 * 60
-        + dt.hour * 60 * 60
-        + dt.minute * 60
-        + dt.second
-    )
-    dow_all_time = 7 * 24 * 60 * 60
-    rate = current_time / dow_all_time
-    x = math.cos(2 * math.pi * rate)
-    y = math.sin(2 * math.pi * rate)
-    return x, y
+    begin_of_week = datetime.datetime.min.replace(
+        year=dt.year, month=dt.month, day=dt.day
+    ) - datetime.timedelta(days=dt.weekday())
+    end_of_week = datetime.datetime.min.replace(
+        year=dt.year, month=dt.month, day=dt.day
+    ) + datetime.timedelta(days=7 - dt.weekday())
+    rate = time_elapsed_ratio(begin=begin_of_week, end=end_of_week, current=dt)
+    return ratio_to_vec(rate)
 
 
 def day_vec(dt: datetime.datetime) -> Tuple[float, float]:
@@ -53,11 +44,25 @@ def day_vec(dt: datetime.datetime) -> Tuple[float, float]:
         year=dt.year, month=dt.month, day=dt.day
     )
     end_of_day = datetime.datetime.min.replace(
-        year=dt.year, month=dt.month, day=dt.day + 1
-    )
-    day_seconds = (end_of_day - begin_of_day).total_seconds()
-    seconds_since_begin_of_day = (dt - begin_of_day).total_seconds()
-    rate = seconds_since_begin_of_day / day_seconds
-    x = math.cos(2 * math.pi * rate)
-    y = math.sin(2 * math.pi * rate)
+        year=dt.year, month=dt.month, day=dt.day
+    ) + datetime.timedelta(days=1)
+    rate = time_elapsed_ratio(begin=begin_of_day, end=end_of_day, current=dt)
+    return ratio_to_vec(rate)
+
+
+def time_elapsed_ratio(
+    *,
+    begin: datetime.datetime,
+    end: datetime.datetime,
+    current: datetime.datetime,
+) -> float:
+    total_seconds = (end - begin).total_seconds()
+    elapsed_time = (current - begin).total_seconds()
+    return elapsed_time / total_seconds
+
+
+def ratio_to_vec(rate: float) -> Tuple[float, float]:
+    s = 2 * math.pi * rate
+    x = math.cos(s)
+    y = math.sin(s)
     return x, y
