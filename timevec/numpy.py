@@ -3,6 +3,8 @@ import datetime
 import numpy as np
 import numpy.typing as npt
 
+from timevec.builtin_math import time_elapsed_ratio
+
 
 def year_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
@@ -10,13 +12,12 @@ def year_vec(
     """Represent the elapsed time in the year as a vector"""
     begin_of_year = datetime.datetime.min.replace(year=dt.year)
     end_of_year = datetime.datetime.min.replace(year=dt.year + 1)
-    year_seconds = (end_of_year - begin_of_year).total_seconds()
-    seconds_since_begin_of_year = (dt - begin_of_year).total_seconds()
-    rate = seconds_since_begin_of_year / year_seconds
-    vec = np.zeros(2, dtype=dtype)
-    vec[0] = np.cos(2 * np.pi * rate)
-    vec[1] = np.sin(2 * np.pi * rate)
-    return vec
+    rate = time_elapsed_ratio(
+        begin=begin_of_year,
+        end=end_of_year,
+        current=dt,
+    )
+    return ratio_to_vec(rate, dtype=dtype)
 
 
 def month_vec(
@@ -29,32 +30,30 @@ def month_vec(
     end_of_month = datetime.datetime.min.replace(
         year=dt.year, month=dt.month + 1
     )
-    month_seconds = (end_of_month - begin_of_month).total_seconds()
-    seconds_since_begin_of_month = (dt - begin_of_month).total_seconds()
-    rate = seconds_since_begin_of_month / month_seconds
-    vec = np.zeros(2, dtype=dtype)
-    vec[0] = np.cos(2 * np.pi * rate)
-    vec[1] = np.sin(2 * np.pi * rate)
-    return vec
+    rate = time_elapsed_ratio(
+        begin=begin_of_month,
+        end=end_of_month,
+        current=dt,
+    )
+    return ratio_to_vec(rate, dtype=dtype)
 
 
 def week_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the week as a vector"""
-    # weekday is 0 for Monday and 6 for Sunday
-    current_time = (
-        dt.weekday() * 24 * 60 * 60
-        + dt.hour * 60 * 60
-        + dt.minute * 60
-        + dt.second
+    begin_of_week = datetime.datetime.min.replace(
+        year=dt.year, month=dt.month, day=dt.day
+    ) - datetime.timedelta(days=dt.weekday())
+    end_of_week = datetime.datetime.min.replace(
+        year=dt.year, month=dt.month, day=dt.day
+    ) + datetime.timedelta(days=7 - dt.weekday())
+    rate = time_elapsed_ratio(
+        begin=begin_of_week,
+        end=end_of_week,
+        current=dt,
     )
-    dow_all_time = 7 * 24 * 60 * 60
-    rate = current_time / dow_all_time
-    vec = np.zeros(2, dtype=dtype)
-    vec[0] = np.cos(2 * np.pi * rate)
-    vec[1] = np.sin(2 * np.pi * rate)
-    return vec
+    return ratio_to_vec(rate, dtype=dtype)
 
 
 def day_vec(
@@ -67,10 +66,19 @@ def day_vec(
     end_of_day = datetime.datetime.min.replace(
         year=dt.year, month=dt.month, day=dt.day + 1
     )
-    day_seconds = (end_of_day - begin_of_day).total_seconds()
-    seconds_since_begin_of_day = (dt - begin_of_day).total_seconds()
-    rate = seconds_since_begin_of_day / day_seconds
+    rate = time_elapsed_ratio(
+        begin=begin_of_day,
+        end=end_of_day,
+        current=dt,
+    )
+    return ratio_to_vec(rate, dtype=dtype)
+
+
+def ratio_to_vec(
+    ratio: float, *, dtype: npt.DTypeLike = np.float64
+) -> npt.NDArray:
+    """Represent the ratio as a vector"""
     vec = np.zeros(2, dtype=dtype)
-    vec[0] = np.cos(2 * np.pi * rate)
-    vec[1] = np.sin(2 * np.pi * rate)
+    vec[0] = np.cos(2.0 * np.pi * ratio)
+    vec[1] = np.sin(2.0 * np.pi * ratio)
     return vec
