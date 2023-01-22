@@ -50,6 +50,7 @@ year_vec(dt: datetime.datetime)
 Create a time vector for a year.
 This is a vector that has periodicity like seasonality.
 (Summer, Autumn, Winter, Spring)
+![year_vec](https://user-images.githubusercontent.com/2596972/213921526-f59c44d1-22c1-4649-88ca-5f50b8d85765.svg)
 
 ## month_vec
 
@@ -60,6 +61,8 @@ month_vec(dt: datetime.datetime)
 Create a time vector for a month.
 This is a vector that has periodicity in a month.
 You can express periodicity such as the beginning of the month, the end of the month, and the salary day.
+![month_vec](https://user-images.githubusercontent.com/2596972/213921552-6369b8f0-6eff-42fd-8f9f-42a9ad62f2b8.svg)
+
 
 ## week_vec
 
@@ -70,6 +73,8 @@ week_vec(dt: datetime.datetime)
 Create a time vector for a week.
 This is a vector that has periodicity in a week.
 You can express periodicity such as weekdays and holidays.
+![week_vec](https://user-images.githubusercontent.com/2596972/213921560-eb7b4e6d-bfc7-487a-926b-2810365ba8d8.svg)
+
 
 ## day_vec
 
@@ -80,6 +85,8 @@ day_vec(dt: datetime.datetime)
 Create a time vector for a day.
 This is a vector that has periodicity in a day.
 You can express periodicity such as morning, noon, and night.
+![day_vec](https://user-images.githubusercontent.com/2596972/213921566-dd69416e-2816-4c3d-9808-b3f87a51e543.svg)
+
 
 # License
 
