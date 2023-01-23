@@ -90,3 +90,27 @@ def test_day_vec() -> None:
     dt = datetime.datetime(2023, 1, 2, 23, 59, 59, 999999)
     x, y = day_vec(dt)
     assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
+
+
+def test_edge_cases() -> None:
+    # beginning of year
+    dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
+    x, y = year_vec(dt)
+    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
+
+    dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
+    x, y = month_vec(dt)
+    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
+
+    dt = datetime.datetime(2023, 1, 2, 0, 0, 0)
+    x, y = week_vec(dt)
+    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
+
+    dt = datetime.datetime(2023, 1, 2, 0, 0, 0)
+    x, y = day_vec(dt)
+    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
+
+    # end of year
+    dt = datetime.datetime(2023, 12, 31, 23, 59, 59, 999999)
+    x, y = year_vec(dt)
+    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
