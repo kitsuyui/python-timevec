@@ -72,3 +72,40 @@ def test_day_vec() -> None:
     dt = datetime.datetime(2023, 1, 1, 12, 0, 0)
     vec = day_vec(dt)
     assert vec == pytest.approx(np.array([-1.0, 0.0]), abs=1e-6)
+
+
+def test_edge_cases() -> None:
+    # beginning of year
+    dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
+    vec = year_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
+
+    dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
+    vec = month_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
+
+    dt = datetime.datetime(2023, 1, 2, 0, 0, 0)  # Monday
+    vec = week_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
+
+    dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
+    vec = day_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
+
+    # end of year
+    dt = datetime.datetime(2023, 12, 31, 23, 59, 59, 999999)
+    vec = year_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
+
+    dt = datetime.datetime(2023, 12, 31, 23, 59, 59, 999999)
+    vec = month_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-5)
+
+    dt = datetime.datetime(2023, 12, 31, 23, 59, 59, 999999)
+    vec = day_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-4)
+
+    # end of month
+    dt = datetime.datetime(2023, 1, 31, 23, 59, 59, 999999)
+    vec = month_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-5)
