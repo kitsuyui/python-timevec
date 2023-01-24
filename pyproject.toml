@@ -67,3 +67,6 @@ ignore_missing_imports = false
 disallow_untyped_defs = false
 warn_return_any = false
 ignore_missing_imports = true
+
+[tool.isort]
+profile = 'black'

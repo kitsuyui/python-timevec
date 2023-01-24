@@ -3,6 +3,7 @@ import datetime
 import numpy as np
 import numpy.typing as npt
 
+from timevec.numpy import ratio_to_vec
 from timevec.util import (
     day_range,
     month_range,
@@ -13,62 +14,65 @@ from timevec.util import (
 
 
 def year_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
+    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the year as a vector"""
-    begin_of_year, end_of_year = year_range(dt)
+    dt2 = datetime64_to_datetime(dt)
+    begin_of_year, end_of_year = year_range(dt2)
     rate = time_elapsed_ratio(
         begin=begin_of_year,
         end=end_of_year,
-        current=dt,
+        current=dt2,
     )
     return ratio_to_vec(rate, dtype=dtype)
 
 
 def month_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
+    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the month as a vector"""
-    begin_of_month, end_of_month = month_range(dt)
+    dt2 = datetime64_to_datetime(dt)
+    begin_of_month, end_of_month = month_range(dt2)
     rate = time_elapsed_ratio(
         begin=begin_of_month,
         end=end_of_month,
-        current=dt,
+        current=dt2,
     )
     return ratio_to_vec(rate, dtype=dtype)
 
 
 def week_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
+    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the week as a vector"""
-    begin_of_week, end_of_week = week_range(dt)
+    dt2 = datetime64_to_datetime(dt)
+    begin_of_week, end_of_week = week_range(dt2)
     rate = time_elapsed_ratio(
         begin=begin_of_week,
         end=end_of_week,
-        current=dt,
+        current=dt2,
     )
     return ratio_to_vec(rate, dtype=dtype)
 
 
 def day_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
+    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the day as a vector"""
-    begin_of_day, end_of_day = day_range(dt)
+    dt2 = datetime64_to_datetime(dt)
+    begin_of_day, end_of_day = day_range(dt2)
     rate = time_elapsed_ratio(
         begin=begin_of_day,
         end=end_of_day,
-        current=dt,
+        current=dt2,
     )
     return ratio_to_vec(rate, dtype=dtype)
 
 
-def ratio_to_vec(
-    ratio: float, *, dtype: npt.DTypeLike = np.float64
-) -> npt.NDArray:
-    """Represent the ratio as a vector"""
-    vec = np.zeros(2, dtype=dtype)
-    vec[0] = np.cos(2.0 * np.pi * ratio)
-    vec[1] = np.sin(2.0 * np.pi * ratio)
-    return vec
+def datetime64_to_datetime(dt: np.datetime64) -> datetime.datetime:
+    """Convert a numpy.datetime64 to a datetime.datetime"""
+    dt64 = np.datetime64(dt)
+    ts = float(
+        (dt64 - np.datetime64("1970-01-01T00:00:00")) / np.timedelta64(1, "s")
+    )
+    return datetime.datetime.utcfromtimestamp(ts)
