@@ -1,3 +1,4 @@
+import calendar
 import datetime
 import math
 from typing import Tuple
@@ -47,3 +48,24 @@ def ratio_to_vec(rate: float) -> Tuple[float, float]:
     x = math.cos(s)
     y = math.sin(s)
     return x, y
+
+
+def vec_to_ratio(x: float, y: float) -> float:
+    # atan2 returns a value in the range [-pi, pi]
+    # so we need to convert it to the range [0, 2*pi]
+    angle = math.atan2(y, x) / (2.0 * math.pi)
+    return angle if angle >= 0 else angle + 1.0
+
+
+def datetime_from_vec(
+    year: int,
+    yv: Tuple[float, float],
+    dv: Tuple[float, float],
+) -> datetime.datetime:
+    position_in_year = vec_to_ratio(*yv)
+    position_in_day = vec_to_ratio(*dv)
+    d = int(position_in_year * (366.0 if calendar.isleap(year) else 365.0))
+    s = position_in_day * 86400.0
+    return datetime.datetime(year, 1, 1, 0, 0, 0, 0) + datetime.timedelta(
+        days=int(d), seconds=s
+    )
