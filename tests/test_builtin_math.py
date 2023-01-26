@@ -2,7 +2,10 @@ import datetime
 
 import pytest
 
-from timevec.builtin_math import day_vec, month_vec, week_vec, year_vec
+from timevec.builtin_math import (
+    day_vec, month_vec, week_vec, year_vec,
+    datetime_from_vec,
+)
 
 
 def test_year_vec() -> None:
@@ -114,3 +117,11 @@ def test_edge_cases() -> None:
     dt = datetime.datetime(2023, 12, 31, 23, 59, 59, 999999)
     x, y = year_vec(dt)
     assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
+
+
+def test_datetime_from_vec() -> None:
+    dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
+    yv = year_vec(dt)
+    dv = day_vec(dt)
+    dt2 = datetime_from_vec(2023, yv, dv)
+    assert pytest.approx(dt, abs=1e-6) == dt2

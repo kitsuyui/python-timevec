@@ -3,7 +3,7 @@ import datetime
 import numpy as np
 import numpy.typing as npt
 
-from timevec.numpy import ratio_to_vec
+from timevec.numpy import datetime_from_vec, ratio_to_vec
 from timevec.util import (
     day_range,
     month_range,
@@ -76,3 +76,13 @@ def datetime64_to_datetime(dt: np.datetime64) -> datetime.datetime:
         (dt64 - np.datetime64("1970-01-01T00:00:00")) / np.timedelta64(1, "s")
     )
     return datetime.datetime.utcfromtimestamp(ts)
+
+
+def datetime64_from_vec(
+    year: int,
+    yv: npt.NDArray,
+    dv: npt.NDArray,
+) -> np.datetime64:
+    """Convert a vector representation of a datetime to a numpy.datetime64"""
+    dt = datetime_from_vec(year, yv, dv)
+    return np.datetime64(dt)
