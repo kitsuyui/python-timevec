@@ -46,6 +46,12 @@ def random_dates(size: int = 2000) -> List[datetime.datetime]:
     return dates
 
 
+def test_long_time_range() -> None:
+    test_dates = random_dates()
+    for dt in test_dates:
+        assert_same(dt, tv.long_time_range, tvn.long_time_range, tv64.long_time_range)
+
+
 def test_millenium_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:

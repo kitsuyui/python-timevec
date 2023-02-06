@@ -6,8 +6,17 @@ from timevec.util import (
     week_range,
     century_range,
     millenium_range,
+    long_time_range,
     year_range,
 )
+
+
+def test_long_time_range() -> None:
+    """Test long_time_range()"""
+    begin, end = long_time_range(datetime.datetime(2000, 1, 1))
+    assert begin == datetime.datetime(1, 1, 1)
+    assert end == datetime.datetime(5001, 1, 1)
+    assert end - begin == datetime.timedelta(days=1826212)  # 5000 years contains 1212 leap years
 
 
 def test_millenium_range() -> None:

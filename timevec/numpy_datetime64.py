@@ -7,12 +7,27 @@ from timevec.numpy import datetime_from_vec, ratio_to_vec
 from timevec.util import (
     century_range,
     day_range,
+    long_time_range,
     millenium_range,
     month_range,
     time_elapsed_ratio,
     week_range,
     year_range,
 )
+
+
+def long_time_vec(
+    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64
+) -> npt.NDArray:
+    """Represent the elapsed time in the long time as a vector"""
+    dt2 = datetime64_to_datetime(dt)
+    begin_of_long_time, end_of_long_time = long_time_range(dt2)
+    rate = time_elapsed_ratio(
+        begin=begin_of_long_time,
+        end=end_of_long_time,
+        current=dt2,
+    )
+    return ratio_to_vec(rate, dtype=dtype)
 
 
 def millenium_vec(
