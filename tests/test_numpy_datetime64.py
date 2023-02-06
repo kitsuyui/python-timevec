@@ -7,6 +7,12 @@ import timevec.numpy_datetime64 as tv64
 import timevec.numpy as tv
 
 
+def test_century_vec() -> None:
+    dt = datetime.datetime.now()
+    dt64 = np.datetime64(dt)
+    assert np.allclose(tv64.century_vec(dt64), tv.century_vec(dt))
+
+
 def test_year_vec() -> None:
     dt = datetime.datetime.now()
     dt64 = np.datetime64(dt)

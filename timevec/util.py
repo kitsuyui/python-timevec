@@ -3,6 +3,50 @@ import datetime
 from typing import Tuple
 
 
+def millenium_range(
+    dt: datetime.datetime,
+) -> Tuple[datetime.datetime, datetime.datetime]:
+    begin_of_millenium = datetime.datetime.min.replace(
+        year=(dt.year - 1) // 1000 * 1000 + 1,
+        month=1,
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+    )
+    end_of_millenium = datetime.datetime.min.replace(
+        year=(dt.year - 1) // 1000 * 1000 + 1001,
+        month=1,
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+    )
+    return begin_of_millenium, end_of_millenium
+
+
+def century_range(
+    dt: datetime.datetime,
+) -> Tuple[datetime.datetime, datetime.datetime]:
+    begin_of_century = datetime.datetime.min.replace(
+        year=(dt.year - 1) // 100 * 100 + 1,
+        month=1,
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+    )
+    end_of_century = datetime.datetime.min.replace(
+        year=(dt.year - 1) // 100 * 100 + 101,
+        month=1,
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+    )
+    return begin_of_century, end_of_century
+
+
 def year_range(
     dt: datetime.datetime,
 ) -> Tuple[datetime.datetime, datetime.datetime]:

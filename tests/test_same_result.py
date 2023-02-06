@@ -46,6 +46,18 @@ def random_dates(size: int = 2000) -> List[datetime.datetime]:
     return dates
 
 
+def test_millenium_vec() -> None:
+    test_dates = random_dates()
+    for dt in test_dates:
+        assert_same(dt, tv.millenium_vec, tvn.millenium_vec, tv64.millenium_vec)
+
+
+def test_century_vec() -> None:
+    test_dates = random_dates()
+    for dt in test_dates:
+        assert_same(dt, tv.century_vec, tvn.century_vec, tv64.century_vec)
+
+
 def test_year_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:

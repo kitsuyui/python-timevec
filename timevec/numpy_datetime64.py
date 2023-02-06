@@ -5,12 +5,42 @@ import numpy.typing as npt
 
 from timevec.numpy import datetime_from_vec, ratio_to_vec
 from timevec.util import (
+    century_range,
     day_range,
+    millenium_range,
     month_range,
     time_elapsed_ratio,
     week_range,
     year_range,
 )
+
+
+def millenium_vec(
+    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64
+) -> npt.NDArray:
+    """Represent the elapsed time in the millenium as a vector"""
+    dt2 = datetime64_to_datetime(dt)
+    begin_of_millenium, end_of_millenium = millenium_range(dt2)
+    rate = time_elapsed_ratio(
+        begin=begin_of_millenium,
+        end=end_of_millenium,
+        current=dt2,
+    )
+    return ratio_to_vec(rate, dtype=dtype)
+
+
+def century_vec(
+    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64
+) -> npt.NDArray:
+    """Represent the elapsed time in the century as a vector"""
+    dt2 = datetime64_to_datetime(dt)
+    begin_of_century, end_of_century = century_range(dt2)
+    rate = time_elapsed_ratio(
+        begin=begin_of_century,
+        end=end_of_century,
+        current=dt2,
+    )
+    return ratio_to_vec(rate, dtype=dtype)
 
 
 def year_vec(

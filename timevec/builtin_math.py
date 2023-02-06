@@ -4,12 +4,32 @@ import math
 from typing import Tuple
 
 from timevec.util import (
+    century_range,
     day_range,
+    millenium_range,
     month_range,
     time_elapsed_ratio,
     week_range,
     year_range,
 )
+
+
+def millenium_vec(dt: datetime.datetime) -> Tuple[float, float]:
+    """Represent the elapsed time in the millenium as a vector"""
+    begin_of_millenium, end_of_millenium = millenium_range(dt)
+    rate = time_elapsed_ratio(
+        begin=begin_of_millenium, end=end_of_millenium, current=dt
+    )
+    return ratio_to_vec(rate)
+
+
+def century_vec(dt: datetime.datetime) -> Tuple[float, float]:
+    """Represent the elapsed time in the century as a vector"""
+    begin_of_century, end_of_century = century_range(dt)
+    rate = time_elapsed_ratio(
+        begin=begin_of_century, end=end_of_century, current=dt
+    )
+    return ratio_to_vec(rate)
 
 
 def year_vec(dt: datetime.datetime) -> Tuple[float, float]:
