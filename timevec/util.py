@@ -3,6 +3,28 @@ import datetime
 from typing import Tuple
 
 
+def long_time_range(
+    dt: datetime.datetime,
+) -> Tuple[datetime.datetime, datetime.datetime]:
+    begin = datetime.datetime.min.replace(
+        year=1,
+        month=1,
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+    )
+    end = datetime.datetime.min.replace(
+        year=5001,
+        month=1,
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+    )
+    return begin, end
+
+
 def millenium_range(
     dt: datetime.datetime,
 ) -> Tuple[datetime.datetime, datetime.datetime]:

@@ -3,7 +3,27 @@ import datetime
 import numpy as np
 import pytest
 
-from timevec.numpy import day_vec, month_vec, week_vec, year_vec, century_vec
+from timevec.numpy import day_vec, month_vec, week_vec, year_vec, century_vec, long_time_vec, millenium_vec
+
+
+def test_long_time_vec() -> None:
+    dt = datetime.datetime(1, 1, 1, 0, 0, 0)
+    vec = long_time_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
+
+    dt = datetime.datetime(5001, 1, 1, 0, 0, 0)
+    vec = long_time_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
+
+
+def test_millenium_vec() -> None:
+    dt = datetime.datetime(2001, 1, 1, 0, 0, 0)
+    vec = millenium_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
+
+    dt = datetime.datetime(3001, 1, 1, 0, 0, 0)
+    vec = millenium_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
 
 
 def test_century_vec() -> None:

@@ -14,6 +14,7 @@ def test_many_dates() -> None:
     # try all the functions does not raise an exception
     for i in range(50000):
         dt += datetime.timedelta(days=17, hours=13, minutes=11, seconds=7)
+        tv.long_time_range(dt)
         tv.millenium_vec(dt)
         tv.century_vec(dt)
         yv = tv.year_vec(dt)
@@ -22,6 +23,7 @@ def test_many_dates() -> None:
         dv = tv.day_vec(dt)
         assert pytest.approx(dt) == tv.datetime_from_vec(dt.year, yv, dv)
 
+        tvn.long_time_range(dt)
         tvn.millenium_vec(dt)
         tvn.century_vec(dt)
         yvn = tvn.year_vec(dt)
@@ -30,6 +32,7 @@ def test_many_dates() -> None:
         dvn = tvn.day_vec(dt)
         assert pytest.approx(dt) == tvn.datetime_from_vec(dt.year, yvn, dvn)
 
+        tv64.long_time_range(np.datetime64(dt))
         tv64.millenium_vec(np.datetime64(dt))
         tv64.century_vec(np.datetime64(dt))
         yv64 = tv64.year_vec(np.datetime64(dt))
