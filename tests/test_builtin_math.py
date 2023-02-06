@@ -4,8 +4,23 @@ import pytest
 
 from timevec.builtin_math import (
     day_vec, month_vec, week_vec, year_vec,
-    datetime_from_vec,
+    datetime_from_vec, century_vec,
+    millenium_vec,
 )
+
+
+def test_millenium_vec() -> None:
+    # 0 degrees at the beginning of the millenium
+    dt = datetime.datetime(2001, 1, 1, 0, 0, 0)
+    x, y = millenium_vec(dt)
+    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
+
+
+def test_century_vec() -> None:
+    # 0 degrees at the beginning of the century
+    dt = datetime.datetime(2001, 1, 1, 0, 0, 0)
+    x, y = century_vec(dt)
+    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
 
 
 def test_year_vec() -> None:

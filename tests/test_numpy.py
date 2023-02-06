@@ -3,7 +3,17 @@ import datetime
 import numpy as np
 import pytest
 
-from timevec.numpy import day_vec, month_vec, week_vec, year_vec
+from timevec.numpy import day_vec, month_vec, week_vec, year_vec, century_vec
+
+
+def test_century_vec() -> None:
+    dt = datetime.datetime(2001, 1, 1, 0, 0, 0)
+    vec = century_vec(dt)
+    assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
+
+    dt = datetime.datetime(2051, 1, 1, 0, 0, 0)
+    vec = century_vec(dt)
+    assert vec == pytest.approx(np.array([-1.0, 0.0]), abs=1e-6)
 
 
 def test_year_vec() -> None:
