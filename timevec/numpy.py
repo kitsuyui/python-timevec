@@ -1,31 +1,31 @@
-import calendar
 import datetime
+from typing import Dict, Iterable
 
 import numpy as np
 import numpy.typing as npt
 
-from timevec.util import (
-    century_range,
-    day_range,
-    long_time_range,
-    millenium_range,
-    month_range,
-    time_elapsed_ratio,
-    week_range,
-    year_range,
-)
+import timevec.util as util
+
+# from timevec.util import (
+#     BEGIN_OF_DATETIME,
+#     TARGET,
+#     century_range,
+#     day_range,
+#     decade_range,
+#     long_time_range,
+#     millenium_range,
+#     month_range,
+#     week_range,
+#     year_range,
+# )
 
 
 def long_time_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the long time as a vector"""
-    begin_of_long_time, end_of_long_time = long_time_range(dt)
-    rate = time_elapsed_ratio(
-        begin=begin_of_long_time,
-        end=end_of_long_time,
-        current=dt,
-    )
+    range = util.long_time_range(dt)
+    rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -33,12 +33,8 @@ def millenium_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the millenium as a vector"""
-    begin_of_millenium, end_of_millenium = millenium_range(dt)
-    rate = time_elapsed_ratio(
-        begin=begin_of_millenium,
-        end=end_of_millenium,
-        current=dt,
-    )
+    range = util.millenium_range(dt)
+    rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -46,12 +42,17 @@ def century_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the century as a vector"""
-    begin_of_century, end_of_century = century_range(dt)
-    rate = time_elapsed_ratio(
-        begin=begin_of_century,
-        end=end_of_century,
-        current=dt,
-    )
+    range = util.century_range(dt)
+    rate = range.time_elapsed_ratio(dt)
+    return ratio_to_vec(rate, dtype=dtype)
+
+
+def decade_vec(
+    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
+) -> npt.NDArray:
+    """Represent the elapsed time in the decade as a vector"""
+    range = util.decade_range(dt)
+    rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -59,12 +60,8 @@ def year_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the year as a vector"""
-    begin_of_year, end_of_year = year_range(dt)
-    rate = time_elapsed_ratio(
-        begin=begin_of_year,
-        end=end_of_year,
-        current=dt,
-    )
+    range = util.year_range(dt)
+    rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -72,12 +69,8 @@ def month_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the month as a vector"""
-    begin_of_month, end_of_month = month_range(dt)
-    rate = time_elapsed_ratio(
-        begin=begin_of_month,
-        end=end_of_month,
-        current=dt,
-    )
+    range = util.month_range(dt)
+    rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -85,12 +78,8 @@ def week_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the week as a vector"""
-    begin_of_week, end_of_week = week_range(dt)
-    rate = time_elapsed_ratio(
-        begin=begin_of_week,
-        end=end_of_week,
-        current=dt,
-    )
+    range = util.week_range(dt)
+    rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -98,12 +87,8 @@ def day_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
     """Represent the elapsed time in the day as a vector"""
-    begin_of_day, end_of_day = day_range(dt)
-    rate = time_elapsed_ratio(
-        begin=begin_of_day,
-        end=end_of_day,
-        current=dt,
-    )
+    range = util.day_range(dt)
+    rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -125,14 +110,83 @@ def vec_to_ratio(arr: npt.NDArray) -> float:
     return float(base if base >= 0.0 else base + 1.0)
 
 
-def datetime_from_vec(
-    year: int,
-    yv: npt.NDArray,
-    dv: npt.NDArray,
+def datetime_to_vecs(
+    dt: datetime.datetime,
+    targets: Iterable[util.TARGET],
+    *,
+    dtype: npt.DTypeLike = np.float64,
+) -> Dict[util.TARGET, npt.NDArray]:
+    """Convert a datetime to a vector"""
+    d: Dict[util.TARGET, npt.NDArray] = {}
+    if "long_time" in targets:
+        d["long_time"] = long_time_vec(dt, dtype=dtype)
+    if "millenium" in targets:
+        d["millenium"] = millenium_vec(dt, dtype=dtype)
+    if "century" in targets:
+        d["century"] = century_vec(dt, dtype=dtype)
+    if "decade" in targets:
+        d["decade"] = decade_vec(dt, dtype=dtype)
+    if "year" in targets:
+        d["year"] = year_vec(dt, dtype=dtype)
+    if "month" in targets:
+        d["month"] = month_vec(dt, dtype=dtype)
+    if "week" in targets:
+        d["week"] = week_vec(dt, dtype=dtype)
+    if "day" in targets:
+        d["day"] = day_vec(dt, dtype=dtype)
+    return d
+
+
+def datetime_from_vecs(
+    items: Dict[util.TARGET, npt.NDArray],
 ) -> datetime.datetime:
-    position_in_year = vec_to_ratio(yv)
-    position_in_day = vec_to_ratio(dv)
-    d = int(position_in_year * (366.0 if calendar.isleap(year) else 365.0))
-    s = position_in_day * 86400.0
-    delta = datetime.timedelta(days=d, seconds=s)
-    return datetime.datetime(year, 1, 1, 0, 0, 0, 0) + delta
+    """Convert a vector to a datetime"""
+    # long time → millenium → century → decade → year → month → week → day
+    t = util.BEGIN_OF_DATETIME
+
+    if "long_time" in items:
+        range = util.long_time_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(items["long_time"]))
+
+    if "millenium" in items:
+        range = util.millenium_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(items["millenium"]))
+
+    if "century" in items:
+        range = util.century_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(items["century"]))
+
+    if "decade" in items:
+        range = util.decade_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(items["decade"]))
+
+    if "year" in items:
+        range = util.year_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(items["year"]))
+
+    if "month" in items:
+        range = util.month_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(items["month"]))
+
+    if "week" in items:
+        range = util.week_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(items["week"]))
+
+    if "day" in items:
+        range = util.day_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(items["day"]))
+
+    return t
+
+
+__all__ = [
+    "century_vec",
+    "day_vec",
+    "long_time_vec",
+    "millenium_vec",
+    "month_vec",
+    "week_vec",
+    "year_vec",
+    "datetime_from_vecs",
+    "datetime_to_vecs",
+]

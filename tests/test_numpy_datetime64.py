@@ -7,6 +7,18 @@ import timevec.numpy_datetime64 as tv64
 import timevec.numpy as tv
 
 
+def test_long_time_vec() -> None:
+    dt = datetime.datetime.now()
+    dt64 = np.datetime64(dt)
+    assert np.allclose(tv64.long_time_vec(dt64), tv.long_time_vec(dt))
+
+
+def test_millenium_vec() -> None:
+    dt = datetime.datetime.now()
+    dt64 = np.datetime64(dt)
+    assert np.allclose(tv64.millenium_vec(dt64), tv.millenium_vec(dt))
+
+
 def test_century_vec() -> None:
     dt = datetime.datetime.now()
     dt64 = np.datetime64(dt)

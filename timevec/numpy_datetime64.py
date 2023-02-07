@@ -1,19 +1,11 @@
 import datetime
+from typing import Dict, Iterable
 
 import numpy as np
 import numpy.typing as npt
 
-from timevec.numpy import datetime_from_vec, ratio_to_vec
-from timevec.util import (
-    century_range,
-    day_range,
-    long_time_range,
-    millenium_range,
-    month_range,
-    time_elapsed_ratio,
-    week_range,
-    year_range,
-)
+import timevec.numpy as tvn
+import timevec.util as util
 
 
 def long_time_vec(
@@ -21,13 +13,9 @@ def long_time_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the long time as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_long_time, end_of_long_time = long_time_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_long_time,
-        end=end_of_long_time,
-        current=dt2,
-    )
-    return ratio_to_vec(rate, dtype=dtype)
+    range = util.long_time_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
+    return tvn.ratio_to_vec(rate, dtype=dtype)
 
 
 def millenium_vec(
@@ -35,13 +23,9 @@ def millenium_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the millenium as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_millenium, end_of_millenium = millenium_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_millenium,
-        end=end_of_millenium,
-        current=dt2,
-    )
-    return ratio_to_vec(rate, dtype=dtype)
+    range = util.millenium_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
+    return tvn.ratio_to_vec(rate, dtype=dtype)
 
 
 def century_vec(
@@ -49,13 +33,9 @@ def century_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the century as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_century, end_of_century = century_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_century,
-        end=end_of_century,
-        current=dt2,
-    )
-    return ratio_to_vec(rate, dtype=dtype)
+    range = util.century_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
+    return tvn.ratio_to_vec(rate, dtype=dtype)
 
 
 def year_vec(
@@ -63,13 +43,9 @@ def year_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the year as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_year, end_of_year = year_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_year,
-        end=end_of_year,
-        current=dt2,
-    )
-    return ratio_to_vec(rate, dtype=dtype)
+    range = util.year_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
+    return tvn.ratio_to_vec(rate, dtype=dtype)
 
 
 def month_vec(
@@ -77,13 +53,9 @@ def month_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the month as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_month, end_of_month = month_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_month,
-        end=end_of_month,
-        current=dt2,
-    )
-    return ratio_to_vec(rate, dtype=dtype)
+    range = util.month_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
+    return tvn.ratio_to_vec(rate, dtype=dtype)
 
 
 def week_vec(
@@ -91,13 +63,9 @@ def week_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the week as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_week, end_of_week = week_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_week,
-        end=end_of_week,
-        current=dt2,
-    )
-    return ratio_to_vec(rate, dtype=dtype)
+    range = util.week_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
+    return tvn.ratio_to_vec(rate, dtype=dtype)
 
 
 def day_vec(
@@ -105,13 +73,9 @@ def day_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the day as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_day, end_of_day = day_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_day,
-        end=end_of_day,
-        current=dt2,
-    )
-    return ratio_to_vec(rate, dtype=dtype)
+    range = util.day_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
+    return tvn.ratio_to_vec(rate, dtype=dtype)
 
 
 def datetime64_to_datetime(dt: np.datetime64) -> datetime.datetime:
@@ -123,11 +87,40 @@ def datetime64_to_datetime(dt: np.datetime64) -> datetime.datetime:
     return datetime.datetime.utcfromtimestamp(ts)
 
 
-def datetime64_from_vec(
-    year: int,
-    yv: npt.NDArray,
-    dv: npt.NDArray,
+def datetime_to_datetime64(dt: datetime.datetime) -> np.datetime64:
+    """Convert a datetime.datetime to a numpy.datetime64"""
+    ts = dt.timestamp()
+    dt64 = np.datetime64("1970-01-01T00:00:00") + np.timedelta64(int(ts), "s")
+    return dt64
+
+
+def datetime64_to_vecs(
+    dt: np.datetime64,
+    targets: Iterable[util.TARGET],
+    *,
+    dtype: npt.DTypeLike = np.float64
+) -> Dict[util.TARGET, npt.NDArray]:
+    """Convert a numpy.datetime64 to a vector"""
+    dt2 = datetime64_to_datetime(dt)
+    return tvn.datetime_to_vecs(dt2, targets, dtype=dtype)
+
+
+def datetime64_from_vecs(
+    items: Dict[util.TARGET, npt.NDArray]
 ) -> np.datetime64:
-    """Convert a vector representation of a datetime to a numpy.datetime64"""
-    dt = datetime_from_vec(year, yv, dv)
-    return np.datetime64(dt)
+    """Convert a vector to a numpy.datetime64"""
+    dt = tvn.datetime_from_vecs(items)
+    return datetime_to_datetime64(dt)
+
+
+__all__ = [
+    "century_vec",
+    "day_vec",
+    "long_time_vec",
+    "millenium_vec",
+    "month_vec",
+    "week_vec",
+    "year_vec",
+    "datetime64_from_vecs",
+    "datetime64_to_vecs",
+]

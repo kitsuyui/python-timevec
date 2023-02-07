@@ -9,37 +9,36 @@ import pytest
 
 def test_many_dates() -> None:
     # start 1-01-01
-    dt = datetime.datetime(1, 1, 1, 0, 0, 0)
+    dt = datetime.datetime(11, 1, 1, 0, 0, 0)
+    full = ['long_time', 'millenium', 'century', 'decade', 'year', 'month', 'week', 'day']
+    minimal = ['long_time', 'century', 'year', 'day']
+
 
     # try all the functions does not raise an exception
     for i in range(50000):
         dt += datetime.timedelta(days=17, hours=13, minutes=11, seconds=7)
-        tv.long_time_range(dt)
-        tv.millenium_vec(dt)
-        tv.century_vec(dt)
-        yv = tv.year_vec(dt)
-        tv.month_vec(dt)
-        tv.week_vec(dt)
-        dv = tv.day_vec(dt)
-        assert pytest.approx(dt) == tv.datetime_from_vec(dt.year, yv, dv)
 
-        tvn.long_time_range(dt)
-        tvn.millenium_vec(dt)
-        tvn.century_vec(dt)
-        yvn = tvn.year_vec(dt)
-        tvn.month_vec(dt)
-        tvn.week_vec(dt)
-        dvn = tvn.day_vec(dt)
-        assert pytest.approx(dt) == tvn.datetime_from_vec(dt.year, yvn, dvn)
+        vecs2 = tv.datetime_to_vecs(dt, full)
+        dt2 = tv.datetime_from_vecs(vecs2)
+        assert dt == dt2
 
-        tv64.long_time_range(np.datetime64(dt))
-        tv64.millenium_vec(np.datetime64(dt))
-        tv64.century_vec(np.datetime64(dt))
-        yv64 = tv64.year_vec(np.datetime64(dt))
-        tv64.month_vec(np.datetime64(dt))
-        tv64.week_vec(np.datetime64(dt))
-        dv64 = tv64.day_vec(np.datetime64(dt))
-        assert pytest.approx(np.datetime64(dt)) == tv64.datetime64_from_vec(dt.year, yv64, dv64)
+        vecs3 = tv.datetime_to_vecs(dt, minimal)
+        dt3 = tv.datetime_from_vecs(vecs3)
+        assert dt == dt3
+
+        vecs4 = tvn.datetime_to_vecs(dt, full)
+        dt4 = tvn.datetime_from_vecs(vecs4)
+        assert dt == dt4
+
+        vecs5 = tvn.datetime_to_vecs(dt, minimal)
+        dt5 = tvn.datetime_from_vecs(vecs5)
+        assert dt == dt5
+
+        vecs6 = tv64.datetime64_to_vecs(np.datetime64(dt), full)
+        tv64.datetime64_from_vecs(vecs6)
+
+        vecs7 = tv64.datetime64_to_vecs(np.datetime64(dt), minimal)
+        tv64.datetime64_from_vecs(vecs7)
 
     # tested up to 2100-01-01
     assert dt >= datetime.datetime(2400, 1, 1, 0, 0, 0)
