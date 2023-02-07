@@ -10,7 +10,6 @@ from timevec.util import (
     long_time_range,
     millenium_range,
     month_range,
-    time_elapsed_ratio,
     week_range,
     year_range,
 )
@@ -21,12 +20,8 @@ def long_time_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the long time as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_long_time, end_of_long_time = long_time_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_long_time,
-        end=end_of_long_time,
-        current=dt2,
-    )
+    range = long_time_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -35,12 +30,8 @@ def millenium_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the millenium as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_millenium, end_of_millenium = millenium_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_millenium,
-        end=end_of_millenium,
-        current=dt2,
-    )
+    range = millenium_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -49,12 +40,8 @@ def century_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the century as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_century, end_of_century = century_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_century,
-        end=end_of_century,
-        current=dt2,
-    )
+    range = century_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -63,12 +50,8 @@ def year_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the year as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_year, end_of_year = year_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_year,
-        end=end_of_year,
-        current=dt2,
-    )
+    range = year_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -77,12 +60,8 @@ def month_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the month as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_month, end_of_month = month_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_month,
-        end=end_of_month,
-        current=dt2,
-    )
+    range = month_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -91,12 +70,8 @@ def week_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the week as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_week, end_of_week = week_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_week,
-        end=end_of_week,
-        current=dt2,
-    )
+    range = week_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
     return ratio_to_vec(rate, dtype=dtype)
 
 
@@ -105,12 +80,8 @@ def day_vec(
 ) -> npt.NDArray:
     """Represent the elapsed time in the day as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    begin_of_day, end_of_day = day_range(dt2)
-    rate = time_elapsed_ratio(
-        begin=begin_of_day,
-        end=end_of_day,
-        current=dt2,
-    )
+    range = day_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
     return ratio_to_vec(rate, dtype=dtype)
 
 
