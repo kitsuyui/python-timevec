@@ -4,6 +4,7 @@ import pytest
 from typing import Tuple, Callable
 
 import timevec.builtin_math as tv
+from timevec.util import DateTimeRange
 
 
 def assert_vector_in_circle(x: float, y: float, *, abs: float = 1e-6) -> None:
@@ -39,7 +40,20 @@ def assert_vector_continuity(
     assert (y1 + y2 + y3) / 3 == pytest.approx(y2, abs=1e-6)
 
 
-def test_basis() -> None:
+def assert_range_vector_value(
+    range: DateTimeRange,
+    fn: Callable[[datetime.datetime], Tuple[float, float]],
+    *,
+    abs: float = 1e-6,
+):
+    assert fn(range.begin) == pytest.approx((1.0, 0.0), abs=abs)
+    assert fn(range.end_of_1st_quarter) == pytest.approx((0.0, 1.0), abs=abs)
+    assert fn(range.end_of_2nd_quarter) == pytest.approx((-1.0, 0.0), abs=abs)
+    assert fn(range.end_of_3rd_quarter) == pytest.approx((0.0, -1.0), abs=abs)
+    assert fn(range.end) == pytest.approx((1.0, 0.0), abs=abs)
+
+
+def test_vector_continuity() -> None:
     # Test that all the functions are consistent with each other
     # and that they are all in the same basis
     many_dates = [
@@ -59,59 +73,34 @@ def test_basis() -> None:
         assert_vector_continuity(dt, tv.day_vec)
 
 
-def test_long_time_vec() -> None:
-    # 0 degrees at the beginning of the long time
-    dt = datetime.datetime(1, 1, 1, 0, 0, 0)
-    x, y = tv.long_time_vec(dt)
-    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
-
-
-def test_millenium_vec() -> None:
-    # 0 degrees at the beginning of the millenium
-    dt = datetime.datetime(2001, 1, 1, 0, 0, 0)
-    x, y = tv.millenium_vec(dt)
-    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
-
-
-def test_century_vec() -> None:
-    # 0 degrees at the beginning of the century
-    dt = datetime.datetime(2001, 1, 1, 0, 0, 0)
-    x, y = tv.century_vec(dt)
-    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
-
-
-def test_year_vec() -> None:
-    # 0 degrees at the beginning of the year
-    dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
-    x, y = tv.year_vec(dt)
-    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
-
-    # 180 degrees at the middle of the year
-    dt = datetime.datetime(2023, 7, 2, 12, 0, 0)
-    x, y = tv.year_vec(dt)
-    assert (x, y) == pytest.approx((-1.0, 0.0), abs=1e-6)
-
-    # 360 degrees at the end of the year
-    dt = datetime.datetime(2023, 12, 31, 23, 59, 59)
-    x, y = tv.year_vec(dt)
-    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
-
-
-def test_month_vec() -> None:
-    # 0 degrees at the beginning of the month
-    dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
-    x, y = tv.month_vec(dt)
-    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
-
-    # 180 degrees at the middle of the month
-    dt = datetime.datetime(2023, 1, 16, 12, 0, 0)
-    x, y = tv.month_vec(dt)
-    assert (x, y) == pytest.approx((-1.0, 0.0), abs=1e-6)
-
-    # 360 degrees at the end of the month
-    dt = datetime.datetime(2023, 1, 31, 23, 59, 59)
-    x, y = tv.month_vec(dt)
-    assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-5)
+def test_range_vector_special_values() -> None:
+    # these vectors has special value at the special angle
+    # 0 degrees at the beginning or the end of the range
+    # 90 degrees at the end of the 1st quarter
+    # 180 degrees at the end of the 2nd quarter
+    # 270 degrees at the end of the 3rd quarter
+    many_dates = [
+        datetime.datetime(100, 1, 1, 0, 0, 0),
+        datetime.datetime(2001, 1, 1, 0, 0, 0),
+        datetime.datetime(2023, 1, 1, 0, 0, 0),
+        datetime.datetime(2023, 2, 1, 0, 0, 0),
+        datetime.datetime(5001, 1, 1, 0, 0, 0),
+    ]
+    for dt in many_dates:
+        range = tv.long_time_range(dt)
+        assert_range_vector_value(range, tv.long_time_vec)
+        range = tv.millenium_range(dt)
+        assert_range_vector_value(range, tv.millenium_vec)
+        range = tv.century_range(dt)
+        assert_range_vector_value(range, tv.century_vec)
+        range = tv.year_range(dt)
+        assert_range_vector_value(range, tv.year_vec)
+        range = tv.month_range(dt)
+        assert_range_vector_value(range, tv.month_vec)
+        range = tv.week_range(dt)
+        assert_range_vector_value(range, tv.week_vec)
+        range = tv.day_range(dt)
+        assert_range_vector_value(range, tv.day_vec)
 
 
 def test_week_vec() -> None:
