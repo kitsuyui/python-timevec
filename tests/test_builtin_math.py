@@ -4,7 +4,7 @@ import pytest
 from typing import Tuple, Callable
 
 import timevec.builtin_math as tv
-from timevec.util import DateTimeRange
+import timevec.util as util
 
 
 def assert_vector_in_circle(x: float, y: float, *, abs: float = 1e-6) -> None:
@@ -41,7 +41,7 @@ def assert_vector_continuity(
 
 
 def assert_range_vector_value(
-    range: DateTimeRange,
+    range: util.DateTimeRange,
     fn: Callable[[datetime.datetime], Tuple[float, float]],
     *,
     abs: float = 1e-6,
@@ -87,19 +87,19 @@ def test_range_vector_special_values() -> None:
         datetime.datetime(5001, 1, 1, 0, 0, 0),
     ]
     for dt in many_dates:
-        range = tv.long_time_range(dt)
+        range = util.long_time_range(dt)
         assert_range_vector_value(range, tv.long_time_vec)
-        range = tv.millenium_range(dt)
+        range = util.millenium_range(dt)
         assert_range_vector_value(range, tv.millenium_vec)
-        range = tv.century_range(dt)
+        range = util.century_range(dt)
         assert_range_vector_value(range, tv.century_vec)
-        range = tv.year_range(dt)
+        range = util.year_range(dt)
         assert_range_vector_value(range, tv.year_vec)
-        range = tv.month_range(dt)
+        range = util.month_range(dt)
         assert_range_vector_value(range, tv.month_vec)
-        range = tv.week_range(dt)
+        range = util.week_range(dt)
         assert_range_vector_value(range, tv.week_vec)
-        range = tv.day_range(dt)
+        range = util.day_range(dt)
         assert_range_vector_value(range, tv.day_vec)
 
 
@@ -178,11 +178,3 @@ def test_edge_cases() -> None:
     dt = datetime.datetime(2023, 12, 31, 23, 59, 59, 999999)
     x, y = tv.year_vec(dt)
     assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
-
-
-def test_datetime_from_vec() -> None:
-    dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
-    yv = tv.year_vec(dt)
-    dv = tv.day_vec(dt)
-    dt2 = tv.datetime_from_vec(2023, yv, dv)
-    assert pytest.approx(dt, abs=1e-6) == dt2

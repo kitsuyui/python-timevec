@@ -1,6 +1,18 @@
 import calendar
 import datetime
 from dataclasses import dataclass
+from typing import Literal
+
+TARGET = Literal[
+    "long_time",
+    "millenium",
+    "century",
+    "decade",
+    "year",
+    "month",
+    "week",
+    "day",
+]
 
 
 @dataclass
@@ -23,6 +35,18 @@ class DateTimeRange:
     def elapsed_time(self, current: datetime.datetime) -> datetime.timedelta:
         return current - self.begin
 
+    def elapsed_time_by_ratio(
+        self,
+        ratio: float,
+    ) -> datetime.timedelta:
+        return ratio * self.total_time
+
+    def current_time_by_ratio(
+        self,
+        ratio: float,
+    ) -> datetime.datetime:
+        return self.begin + self.elapsed_time_by_ratio(ratio)
+
     def time_elapsed_ratio(self, current: datetime.datetime) -> float:
         return (
             self.elapsed_time(current).total_seconds()
@@ -42,27 +66,18 @@ class DateTimeRange:
         return self.begin + 3 * self.quarter_time
 
 
+BEGIN_OF_DATETIME = datetime.datetime(1, 1, 1, 0, 0, 0)
+END_OF_DATETIME = datetime.datetime(5001, 1, 1, 0, 0, 0)
+
+
 def long_time_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
     """Return a DateTimeRange that covers a long time period"""
-    begin = datetime.datetime.min.replace(
-        year=1,
-        month=1,
-        day=1,
-        hour=0,
-        minute=0,
-        second=0,
+    return DateTimeRange(
+        begin=BEGIN_OF_DATETIME,
+        end=END_OF_DATETIME,
     )
-    end = datetime.datetime.min.replace(
-        year=5001,
-        month=1,
-        day=1,
-        hour=0,
-        minute=0,
-        second=0,
-    )
-    return DateTimeRange(begin, end)
 
 
 def millenium_range(
@@ -109,6 +124,29 @@ def century_range(
         second=0,
     )
     return DateTimeRange(begin_of_century, end_of_century)
+
+
+def decade_range(
+    dt: datetime.datetime,
+) -> DateTimeRange:
+    """Return a DateTimeRange that covers a decade"""
+    begin_of_decade = datetime.datetime.min.replace(
+        year=dt.year // 10 * 10,
+        month=1,
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+    )
+    end_of_decade = datetime.datetime.min.replace(
+        year=dt.year // 10 * 10 + 10,
+        month=1,
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+    )
+    return DateTimeRange(begin_of_decade, end_of_decade)
 
 
 def year_range(
@@ -202,3 +240,16 @@ def day_range(
         second=0,
     ) + datetime.timedelta(days=1)
     return DateTimeRange(begin_of_day, end_of_day)
+
+
+__all__ = [
+    "DateTimeRange",
+    "long_time_range",
+    "millenium_range",
+    "century_range",
+    "decade_range",
+    "year_range",
+    "month_range",
+    "week_range",
+    "day_range",
+]
