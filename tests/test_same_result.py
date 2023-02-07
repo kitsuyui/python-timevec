@@ -21,6 +21,7 @@ def assert_same(
     rel_tol: float = 1e-9,
     abs_tol: float = 0.0,
 ) -> None:
+    """Assert that the functions return the same result."""
     dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
     result1 = func1(dt)
     result2 = func2(dt)
@@ -30,6 +31,7 @@ def assert_same(
 
 
 def random_date() -> datetime.datetime:
+    """Return a random datetime between 1990-01-01 and 2030-12-31."""
     year = random.randint(1990, 2030)
     month = random.randint(1, 12)
     day = random.randint(1, 28)
@@ -40,16 +42,17 @@ def random_date() -> datetime.datetime:
 
 
 def random_dates(size: int = 2000) -> List[datetime.datetime]:
+    """Return a list of random datetimes."""
     dates = []
     for _ in range(size):
         dates.append(random_date())
     return dates
 
 
-def test_long_time_range() -> None:
+def test_long_time_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:
-        assert_same(dt, tv.long_time_range, tvn.long_time_range, tv64.long_time_range)
+        assert_same(dt, tv.long_time_vec, tvn.long_time_vec, tv64.long_time_vec)
 
 
 def test_millenium_vec() -> None:
