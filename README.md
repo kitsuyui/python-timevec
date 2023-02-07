@@ -36,10 +36,16 @@ vec = tv.year_vec(dt)
 # array([1., 0.])
 ```
 
-# Functions
+# Modules
 
 - `timevec.numpy` provides functions that return numpy.ndarray.
+- `timevec.numpy_datetime64` provides functions that return numpy.datetime64.
 - `timevec.builtin_math` provides functions that return tuple of float.
+
+# Functions
+
+Almost same functions are provided in `timevec.numpy`, `timevec.numpy_datetime64`, and `timevec.builtin_math`.
+The difference is the return type.
 
 ## year_vec
 
@@ -87,6 +93,13 @@ This is a vector that has periodicity in a day.
 You can express periodicity such as morning, noon, and night.
 ![day_vec](https://user-images.githubusercontent.com/2596972/213921566-dd69416e-2816-4c3d-9808-b3f87a51e543.svg)
 
+
+## Others
+
+- `long_time_vec` ... 1 to 5001 years period
+- `millenium_vec` ... one millenium (1000 years) period
+- `century_vec` ... one century (100 years) period
+- `decade_vec` ... one decade (10 years) period
 
 # License
 
