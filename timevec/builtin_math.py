@@ -65,6 +65,7 @@ def day_vec(dt: datetime.datetime) -> Tuple[float, float]:
 
 
 def ratio_to_vec(rate: float) -> Tuple[float, float]:
+    """Convert a rate to a vector"""
     s = 2 * math.pi * rate
     x = math.cos(s)
     y = math.sin(s)
@@ -72,6 +73,7 @@ def ratio_to_vec(rate: float) -> Tuple[float, float]:
 
 
 def vec_to_ratio(x: float, y: float) -> float:
+    """Convert a vector to a rate"""
     # atan2 returns a value in the range [-pi, pi]
     # so we need to convert it to the range [0, 2*pi]
     angle = math.atan2(y, x) / (2.0 * math.pi)

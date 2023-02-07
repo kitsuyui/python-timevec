@@ -45,6 +45,7 @@ class DateTimeRange:
 def long_time_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
+    """Return a DateTimeRange that covers a long time period"""
     begin = datetime.datetime.min.replace(
         year=1,
         month=1,
@@ -67,6 +68,7 @@ def long_time_range(
 def millenium_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
+    """Return a DateTimeRange that covers a millenium"""
     begin_of_millenium = datetime.datetime.min.replace(
         year=(dt.year - 1) // 1000 * 1000 + 1,
         month=1,
@@ -89,6 +91,7 @@ def millenium_range(
 def century_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
+    """Return a DateTimeRange that covers a century"""
     begin_of_century = datetime.datetime.min.replace(
         year=(dt.year - 1) // 100 * 100 + 1,
         month=1,
@@ -111,6 +114,7 @@ def century_range(
 def year_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
+    """Return a DateTimeRange that covers a year"""
     begin_of_year = datetime.datetime.min.replace(
         year=dt.year,
         month=1,
@@ -133,6 +137,7 @@ def year_range(
 def month_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
+    """Return a DateTimeRange that covers a month"""
     begin_of_month = datetime.datetime.min.replace(
         year=dt.year,
         month=dt.month,
@@ -156,6 +161,7 @@ def month_range(
 def week_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
+    """Return a DateTimeRange that covers a week"""
     begin_of_week = datetime.datetime.min.replace(
         year=dt.year,
         month=dt.month,
@@ -178,6 +184,7 @@ def week_range(
 def day_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
+    """Return a DateTimeRange that covers a day"""
     begin_of_day = datetime.datetime.min.replace(
         year=dt.year,
         month=dt.month,
