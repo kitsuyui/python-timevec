@@ -10,7 +10,7 @@ import pytest
 def test_many_dates() -> None:
     # start 1-01-01
     dt = datetime.datetime(11, 1, 1, 0, 0, 0)
-    full = ['long_time', 'millenium', 'century', 'decade', 'year', 'month', 'week', 'day']
+    full = ['long_time', 'millennium', 'century', 'decade', 'year', 'month', 'week', 'day']
     minimal = ['long_time', 'century', 'year', 'day']
 
 

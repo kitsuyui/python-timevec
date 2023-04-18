@@ -12,9 +12,9 @@ def long_time_vec(dt: datetime.datetime) -> Tuple[float, float]:
     return ratio_to_vec(rate)
 
 
-def millenium_vec(dt: datetime.datetime) -> Tuple[float, float]:
-    """Represent the elapsed time in the millenium as a vector"""
-    range = util.millenium_range(dt)
+def millennium_vec(dt: datetime.datetime) -> Tuple[float, float]:
+    """Represent the elapsed time in the millennium as a vector"""
+    range = util.millennium_range(dt)
     rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate)
 
@@ -86,8 +86,8 @@ def datetime_to_vecs(
     d: Dict[util.TARGET, Tuple[float, float]] = {}
     if "long_time" in targets:
         d["long_time"] = long_time_vec(dt)
-    if "millenium" in targets:
-        d["millenium"] = millenium_vec(dt)
+    if "millennium" in targets:
+        d["millennium"] = millennium_vec(dt)
     if "century" in targets:
         d["century"] = century_vec(dt)
     if "decade" in targets:
@@ -107,16 +107,16 @@ def datetime_from_vecs(
     items: Dict[util.TARGET, Tuple[float, float]],
 ) -> datetime.datetime:
     """Convert a vector to a datetime"""
-    # long time → millenium → century → decade → year → month → week → day
+    # long time → millennium → century → decade → year → month → week → day
     t = util.BEGIN_OF_DATETIME
 
     if "long_time" in items:
         range = util.long_time_range(t)
         t = range.current_time_by_ratio(vec_to_ratio(*items["long_time"]))
 
-    if "millenium" in items:
-        range = util.millenium_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(*items["millenium"]))
+    if "millennium" in items:
+        range = util.millennium_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(*items["millennium"]))
 
     if "century" in items:
         range = util.century_range(t)
@@ -147,7 +147,7 @@ def datetime_from_vecs(
 
 __all__ = [
     "long_time_vec",
-    "millenium_vec",
+    "millennium_vec",
     "century_vec",
     "decade_vec",
     "year_vec",

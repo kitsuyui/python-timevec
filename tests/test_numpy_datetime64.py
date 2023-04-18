@@ -13,10 +13,10 @@ def test_long_time_vec() -> None:
     assert np.allclose(tv64.long_time_vec(dt64), tv.long_time_vec(dt))
 
 
-def test_millenium_vec() -> None:
+def test_millennium_vec() -> None:
     dt = datetime.datetime.now()
     dt64 = np.datetime64(dt)
-    assert np.allclose(tv64.millenium_vec(dt64), tv.millenium_vec(dt))
+    assert np.allclose(tv64.millennium_vec(dt64), tv.millennium_vec(dt))
 
 
 def test_century_vec() -> None:

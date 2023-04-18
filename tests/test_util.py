@@ -5,7 +5,7 @@ from timevec.util import (
     month_range,
     week_range,
     century_range,
-    millenium_range,
+    millennium_range,
     long_time_range,
     year_range,
     DateTimeRange,
@@ -47,9 +47,9 @@ def test_long_time_range() -> None:
     )  # 5000 years contains 1212 leap years
 
 
-def test_millenium_range() -> None:
-    """Test millenium_range()"""
-    range = millenium_range(datetime.datetime(2000, 1, 1))
+def test_millennium_range() -> None:
+    """Test millennium_range()"""
+    range = millennium_range(datetime.datetime(2000, 1, 1))
     assert_date_time_range(range)
     assert range.begin == datetime.datetime(1001, 1, 1)
     assert range.end == datetime.datetime(2001, 1, 1)

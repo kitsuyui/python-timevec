@@ -5,7 +5,7 @@ from typing import Literal
 
 TARGET = Literal[
     "long_time",
-    "millenium",
+    "millennium",
     "century",
     "decade",
     "year",
@@ -80,11 +80,11 @@ def long_time_range(
     )
 
 
-def millenium_range(
+def millennium_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
-    """Return a DateTimeRange that covers a millenium"""
-    begin_of_millenium = datetime.datetime.min.replace(
+    """Return a DateTimeRange that covers a millennium"""
+    begin_of_millennium = datetime.datetime.min.replace(
         year=(dt.year - 1) // 1000 * 1000 + 1,
         month=1,
         day=1,
@@ -92,7 +92,7 @@ def millenium_range(
         minute=0,
         second=0,
     )
-    end_of_millenium = datetime.datetime.min.replace(
+    end_of_millennium = datetime.datetime.min.replace(
         year=(dt.year - 1) // 1000 * 1000 + 1001,
         month=1,
         day=1,
@@ -100,7 +100,7 @@ def millenium_range(
         minute=0,
         second=0,
     )
-    return DateTimeRange(begin_of_millenium, end_of_millenium)
+    return DateTimeRange(begin_of_millennium, end_of_millennium)
 
 
 def century_range(
@@ -245,7 +245,7 @@ def day_range(
 __all__ = [
     "DateTimeRange",
     "long_time_range",
-    "millenium_range",
+    "millennium_range",
     "century_range",
     "decade_range",
     "year_range",

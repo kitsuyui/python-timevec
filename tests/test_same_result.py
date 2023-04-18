@@ -55,10 +55,10 @@ def test_long_time_vec() -> None:
         assert_same(dt, tv.long_time_vec, tvn.long_time_vec, tv64.long_time_vec)
 
 
-def test_millenium_vec() -> None:
+def test_millennium_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:
-        assert_same(dt, tv.millenium_vec, tvn.millenium_vec, tv64.millenium_vec)
+        assert_same(dt, tv.millennium_vec, tvn.millennium_vec, tv64.millennium_vec)
 
 
 def test_century_vec() -> None:
