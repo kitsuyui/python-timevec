@@ -54,15 +54,15 @@ class DateTimeRange:
         )
 
     @property
-    def end_of_1st_quarter(self) -> datetime.datetime:
+    def end_of_first_quarter(self) -> datetime.datetime:
         return self.begin + 1 * self.quarter_time
 
     @property
-    def end_of_2nd_quarter(self) -> datetime.datetime:
+    def end_of_second_quarter(self) -> datetime.datetime:
         return self.begin + 2 * self.quarter_time
 
     @property
-    def end_of_3rd_quarter(self) -> datetime.datetime:
+    def end_of_third_quarter(self) -> datetime.datetime:
         return self.begin + 3 * self.quarter_time
 
 

@@ -18,9 +18,9 @@ def assert_date_time_range(range: DateTimeRange) -> None:
     assert range.total_time == 2 * range.half_time == 4 * range.quarter_time
     assert (
         range.begin
-        < range.end_of_1st_quarter
-        < range.end_of_2nd_quarter
-        < range.end_of_3rd_quarter
+        < range.end_of_first_quarter
+        < range.end_of_second_quarter
+        < range.end_of_third_quarter
         < range.end
     )
 
