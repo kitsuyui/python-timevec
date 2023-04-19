@@ -18,12 +18,12 @@ def long_time_vec(
     return tvn.ratio_to_vec(rate, dtype=dtype)
 
 
-def millenium_vec(
+def millennium_vec(
     dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
-    """Represent the elapsed time in the millenium as a vector"""
+    """Represent the elapsed time in the millennium as a vector"""
     dt2 = datetime64_to_datetime(dt)
-    range = util.millenium_range(dt2)
+    range = util.millennium_range(dt2)
     rate = range.time_elapsed_ratio(dt2)
     return tvn.ratio_to_vec(rate, dtype=dtype)
 
@@ -117,7 +117,7 @@ __all__ = [
     "century_vec",
     "day_vec",
     "long_time_vec",
-    "millenium_vec",
+    "millennium_vec",
     "month_vec",
     "week_vec",
     "year_vec",

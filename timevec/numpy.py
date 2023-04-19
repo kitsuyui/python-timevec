@@ -13,7 +13,7 @@ import timevec.util as util
 #     day_range,
 #     decade_range,
 #     long_time_range,
-#     millenium_range,
+#     millennium_range,
 #     month_range,
 #     week_range,
 #     year_range,
@@ -29,11 +29,11 @@ def long_time_vec(
     return ratio_to_vec(rate, dtype=dtype)
 
 
-def millenium_vec(
+def millennium_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
 ) -> npt.NDArray:
-    """Represent the elapsed time in the millenium as a vector"""
-    range = util.millenium_range(dt)
+    """Represent the elapsed time in the millennium as a vector"""
+    range = util.millennium_range(dt)
     rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate, dtype=dtype)
 
@@ -120,8 +120,8 @@ def datetime_to_vecs(
     d: Dict[util.TARGET, npt.NDArray] = {}
     if "long_time" in targets:
         d["long_time"] = long_time_vec(dt, dtype=dtype)
-    if "millenium" in targets:
-        d["millenium"] = millenium_vec(dt, dtype=dtype)
+    if "millennium" in targets:
+        d["millennium"] = millennium_vec(dt, dtype=dtype)
     if "century" in targets:
         d["century"] = century_vec(dt, dtype=dtype)
     if "decade" in targets:
@@ -141,16 +141,16 @@ def datetime_from_vecs(
     items: Dict[util.TARGET, npt.NDArray],
 ) -> datetime.datetime:
     """Convert a vector to a datetime"""
-    # long time → millenium → century → decade → year → month → week → day
+    # long time → millennium → century → decade → year → month → week → day
     t = util.BEGIN_OF_DATETIME
 
     if "long_time" in items:
         range = util.long_time_range(t)
         t = range.current_time_by_ratio(vec_to_ratio(items["long_time"]))
 
-    if "millenium" in items:
-        range = util.millenium_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(items["millenium"]))
+    if "millennium" in items:
+        range = util.millennium_range(t)
+        t = range.current_time_by_ratio(vec_to_ratio(items["millennium"]))
 
     if "century" in items:
         range = util.century_range(t)
@@ -183,7 +183,7 @@ __all__ = [
     "century_vec",
     "day_vec",
     "long_time_vec",
-    "millenium_vec",
+    "millennium_vec",
     "month_vec",
     "week_vec",
     "year_vec",

@@ -16,13 +16,13 @@ def test_long_time_vec() -> None:
     assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
 
 
-def test_millenium_vec() -> None:
+def test_millennium_vec() -> None:
     dt = datetime.datetime(2001, 1, 1, 0, 0, 0)
-    vec = tvn.millenium_vec(dt)
+    vec = tvn.millennium_vec(dt)
     assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
 
     dt = datetime.datetime(3001, 1, 1, 0, 0, 0)
-    vec = tvn.millenium_vec(dt)
+    vec = tvn.millennium_vec(dt)
     assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
 
 

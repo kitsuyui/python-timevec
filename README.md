@@ -97,7 +97,7 @@ You can express periodicity such as morning, noon, and night.
 ## Others
 
 - `long_time_vec` ... 1 to 5001 years period
-- `millenium_vec` ... one millenium (1000 years) period
+- `millennium_vec` ... one millennium (1000 years) period
 - `century_vec` ... one century (100 years) period
 - `decade_vec` ... one decade (10 years) period
 

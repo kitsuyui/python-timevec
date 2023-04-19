@@ -47,9 +47,9 @@ def assert_range_vector_value(
     abs: float = 1e-6,
 ):
     assert fn(range.begin) == pytest.approx((1.0, 0.0), abs=abs)
-    assert fn(range.end_of_1st_quarter) == pytest.approx((0.0, 1.0), abs=abs)
-    assert fn(range.end_of_2nd_quarter) == pytest.approx((-1.0, 0.0), abs=abs)
-    assert fn(range.end_of_3rd_quarter) == pytest.approx((0.0, -1.0), abs=abs)
+    assert fn(range.end_of_first_quarter) == pytest.approx((0.0, 1.0), abs=abs)
+    assert fn(range.end_of_second_quarter) == pytest.approx((-1.0, 0.0), abs=abs)
+    assert fn(range.end_of_third_quarter) == pytest.approx((0.0, -1.0), abs=abs)
     assert fn(range.end) == pytest.approx((1.0, 0.0), abs=abs)
 
 
@@ -65,7 +65,7 @@ def test_vector_continuity() -> None:
     ]
     for dt in many_dates:
         assert_vector_continuity(dt, tv.long_time_vec)
-        assert_vector_continuity(dt, tv.millenium_vec)
+        assert_vector_continuity(dt, tv.millennium_vec)
         assert_vector_continuity(dt, tv.century_vec)
         assert_vector_continuity(dt, tv.year_vec)
         assert_vector_continuity(dt, tv.month_vec)
@@ -89,8 +89,8 @@ def test_range_vector_special_values() -> None:
     for dt in many_dates:
         range = util.long_time_range(dt)
         assert_range_vector_value(range, tv.long_time_vec)
-        range = util.millenium_range(dt)
-        assert_range_vector_value(range, tv.millenium_vec)
+        range = util.millennium_range(dt)
+        assert_range_vector_value(range, tv.millennium_vec)
         range = util.century_range(dt)
         assert_range_vector_value(range, tv.century_vec)
         range = util.year_range(dt)
