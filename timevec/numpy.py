@@ -6,19 +6,6 @@ import numpy.typing as npt
 
 import timevec.util as util
 
-# from timevec.util import (
-#     BEGIN_OF_DATETIME,
-#     TARGET,
-#     century_range,
-#     day_range,
-#     decade_range,
-#     long_time_range,
-#     millennium_range,
-#     month_range,
-#     week_range,
-#     year_range,
-# )
-
 
 def long_time_vec(
     dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64
