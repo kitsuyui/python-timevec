@@ -10,13 +10,16 @@ name = "timevec"
 version = "0.0.0"
 description = ""
 authors = []
-packages = [
-    { include = "timevec" },
-]
+packages = [{ include = "timevec" }]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-numpy = "^1.24.1"
+numpy = [
+    { version = ">=1.26.0", python = "=3.12" },
+    { version = "*", python = "^3.8" },
+    { version = "~1.21.6", python = "=3.7" },
+    { version = "~1.19.5", python = "=3.6" },
+]
 matplotlib = "^3.6.3"
 
 [tool.poetry.group.dev.dependencies]
@@ -32,9 +35,7 @@ setuptools-scm = "*"
 build = "*"
 
 [build-system]
-requires = [
-    "setuptools", "setuptools_scm"
-]
+requires = ["setuptools", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
@@ -44,19 +45,17 @@ write_to = "timevec/_version.py"
 test = "pytest"
 coverage-xml = "pytest --cov=timevec --doctest-modules --cov-report=xml"
 format = [
-    { cmd = "isort timevec"},
-    { cmd = "black timevec"},
-    { cmd = "pyupgrade --py38-plus timevec/*.py"},
+    { cmd = "isort timevec" },
+    { cmd = "black timevec" },
+    { cmd = "pyupgrade --py38-plus timevec/*.py" },
 ]
 check = [
-    { cmd = "isort --check-only --diff timevec"},
-    { cmd = "black --check --diff timevec"},
-    { cmd = "flake8 timevec"},
-    { cmd = "mypy timevec"},
+    { cmd = "isort --check-only --diff timevec" },
+    { cmd = "black --check --diff timevec" },
+    { cmd = "flake8 timevec" },
+    { cmd = "mypy timevec" },
 ]
-build = [
-    { cmd = "python -m build"}
-]
+build = [{ cmd = "python -m build" }]
 [tool.mypy]
 warn_return_any = true
 warn_unused_configs = true
