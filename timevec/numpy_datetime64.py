@@ -98,7 +98,7 @@ def datetime64_to_vecs(
     dt: np.datetime64,
     targets: Iterable[util.TARGET],
     *,
-    dtype: npt.DTypeLike = np.float64
+    dtype: npt.DTypeLike = np.float64,
 ) -> Dict[util.TARGET, npt.NDArray]:
     """Convert a numpy.datetime64 to a vector"""
     dt2 = datetime64_to_datetime(dt)
@@ -106,7 +106,7 @@ def datetime64_to_vecs(
 
 
 def datetime64_from_vecs(
-    items: Dict[util.TARGET, npt.NDArray]
+    items: Dict[util.TARGET, npt.NDArray],
 ) -> np.datetime64:
     """Convert a vector to a numpy.datetime64"""
     dt = tvn.datetime_from_vecs(items)
