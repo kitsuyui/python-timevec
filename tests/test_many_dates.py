@@ -1,18 +1,33 @@
+from typing import Iterable, Literal
+
 import timevec.numpy as tvn
 import timevec.numpy_datetime64 as tv64
 import timevec.builtin_math as tv
 import numpy as np
 import datetime
 
-import pytest
-
 
 def test_many_dates() -> None:
     # start 1-01-01
     dt = datetime.datetime(11, 1, 1, 0, 0, 0)
-    full = ['long_time', 'millennium', 'century', 'decade', 'year', 'month', 'week', 'day']
-    minimal = ['long_time', 'century', 'year', 'day']
-
+    full: Iterable[
+        Literal[
+            "long_time",
+            "millennium",
+            "century",
+            "decade",
+            "year",
+            "month",
+            "week",
+            "day",
+        ]
+    ] = ["long_time", "millennium", "century", "decade", "year", "month", "week", "day"]
+    minimal: Iterable[Literal["long_time", "century", "year", "day"]] = [
+        "long_time",
+        "century",
+        "year",
+        "day",
+    ]
 
     # try all the functions does not raise an exception
     for i in range(50000):

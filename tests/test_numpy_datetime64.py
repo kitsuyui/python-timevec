@@ -1,7 +1,6 @@
 import datetime
 
 import numpy as np
-import pytest
 
 import timevec.numpy_datetime64 as tv64
 import timevec.numpy as tv
