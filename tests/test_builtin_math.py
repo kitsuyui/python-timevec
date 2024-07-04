@@ -45,7 +45,7 @@ def assert_range_vector_value(
     fn: Callable[[datetime.datetime], Tuple[float, float]],
     *,
     abs: float = 1e-6,
-):
+) -> None:
     assert fn(range.begin) == pytest.approx((1.0, 0.0), abs=abs)
     assert fn(range.end_of_first_quarter) == pytest.approx((0.0, 1.0), abs=abs)
     assert fn(range.end_of_second_quarter) == pytest.approx((-1.0, 0.0), abs=abs)
