@@ -1,3 +1,50 @@
+[project]
+name = "timevec"
+dynamic = ["version"]
+requires-python = ">=3.9"
+dependencies = []
+description = "Get some usable vector representations of datetime."
+readme = {file = "README.md", content-type = "text/markdown"}
+license = { file = "LICENSE" }
+authors = [
+    {name = "Yui KITSU", email = "kitsuyui+github@kitsuyui.com"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+]
+[project.optional-dependencies]
+numpy = [
+    # https://endoflife.date/numpy
+    "numpy>=1.25.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/kitsuyui/python-timevec"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest",
+    "pytest-cov",
+    "poethepoet",
+    "setuptools-scm",
+    "ruff",
+    "mypy",
+    "numpy",
+    "matplotlib",
+]
+
+[tool.setuptools]
+package-data = { "timevec" = ["py.typed"], "*" = ["README.md, LICENSE"] }
+package-dir = { "timevec" = "timevec" }
+
 [tool.poetry]
 # I use poetry as just a package manager.
 # So, I only write the settings that poetry needs.
@@ -9,29 +56,14 @@ description = ""
 authors = []
 packages = [{ include = "timevec" }]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-numpy = [
-    { version = ">=1.26.0", python = "^3.12" },
-    { version = "*", python = "^3.9" },
-]
-matplotlib = "^3.6.3"
-
-[tool.poetry.group.dev.dependencies]
-ruff = "*"
-pytest = "*"
-pytest-cov = "*"
-poethepoet = "*"
-setuptools-scm = "*"
-build = "*"
-mypy = "*"
-
 [build-system]
 requires = ["setuptools", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 write_to = "timevec/_version.py"
+version_scheme = "only-version"
+local_scheme = "no-local-version"
 
 [tool.poe.tasks]
 test = "pytest"
@@ -41,7 +73,6 @@ check = [
     {cmd = "ruff check timevec tests"},
     {cmd = "mypy timevec tests"},
 ]
-build = [{ cmd = "python -m build" }]
 
 [tool.ruff]
 line-length = 79
