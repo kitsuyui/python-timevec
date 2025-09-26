@@ -29,8 +29,8 @@ numpy = [
 [project.urls]
 Homepage = "https://github.com/kitsuyui/python-timevec"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "pytest",
     "pytest-cov",
     "poethepoet",
