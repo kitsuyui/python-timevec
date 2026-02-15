@@ -2,7 +2,7 @@
 
 [![python versions](https://img.shields.io/pypi/pyversions/timevec)](https://pypi.org/project/timevec/)
 [![package version](https://img.shields.io/pypi/v/timevec)](https://pypi.org/project/timevec/#history)
-[![codecov](https://codecov.io/gh/kitsuyui/python-timevec/branch/main/graph/badge.svg?token=38BQRO1R00)](https://codecov.io/gh/kitsuyui/python-timevec)
+![Coverage](https://raw.githubusercontent.com/kitsuyui/octocov-central/main/badges/kitsuyui/python-timevec/coverage.svg)
 
 Functions to create time vectors
 
