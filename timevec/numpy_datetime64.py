@@ -84,7 +84,7 @@ def datetime64_to_datetime(dt: np.datetime64) -> datetime.datetime:
     ts = float(
         (dt64 - np.datetime64("1970-01-01T00:00:00")) / np.timedelta64(1, "s")
     )
-    return datetime.datetime.utcfromtimestamp(ts)
+    return datetime.datetime.fromtimestamp(ts, datetime.UTC).replace(tzinfo=None)
 
 
 def datetime_to_datetime64(dt: datetime.datetime) -> np.datetime64:
