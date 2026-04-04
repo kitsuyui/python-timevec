@@ -6,6 +6,10 @@ resolution-markers = [
     "python_full_version < '3.11'",
 ]
 
+[options]
+exclude-newer = "2026-04-02T20:15:10.04498Z"
+exclude-newer-span = "P2D"
+
 [[package]]
 name = "colorama"
 version = "0.4.6"
