@@ -1,10 +1,12 @@
-from typing import Iterable, Literal
+import datetime
+from collections.abc import Iterable
+from typing import Literal
 
+import numpy as np
+
+import timevec.builtin_math as tv
 import timevec.numpy as tvn
 import timevec.numpy_datetime64 as tv64
-import timevec.builtin_math as tv
-import numpy as np
-import datetime
 
 
 def test_many_dates() -> None:
@@ -30,7 +32,7 @@ def test_many_dates() -> None:
     ]
 
     # try all the functions does not raise an exception
-    for i in range(50000):
+    for _i in range(50000):
         dt += datetime.timedelta(days=17, hours=13, minutes=11, seconds=7)
 
         vecs2 = tv.datetime_to_vecs(dt, full)

@@ -1,14 +1,14 @@
 import datetime
 
 from timevec.util import (
+    DateTimeRange,
+    century_range,
     day_range,
+    long_time_range,
+    millennium_range,
     month_range,
     week_range,
-    century_range,
-    millennium_range,
-    long_time_range,
     year_range,
-    DateTimeRange,
 )
 
 
@@ -28,7 +28,7 @@ def assert_date_time_range(range: DateTimeRange) -> None:
 def test_date_time_range() -> None:
     """Test DateTimeRange"""
     range = DateTimeRange(
-        datetime.datetime(2000, 1, 1), datetime.datetime(2000, 1, 2)
+        datetime.datetime(2000, 1, 1), datetime.datetime(2000, 1, 2),
     )
     assert_date_time_range(range)
     assert range.begin == datetime.datetime(2000, 1, 1)
@@ -43,7 +43,7 @@ def test_long_time_range() -> None:
     assert range.begin == datetime.datetime(1, 1, 1)
     assert range.end == datetime.datetime(5001, 1, 1)
     assert range.total_time == datetime.timedelta(
-        days=1826212
+        days=1826212,
     )  # 5000 years contains 1212 leap years
 
 

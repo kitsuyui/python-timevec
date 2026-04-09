@@ -2,8 +2,8 @@ import datetime
 
 import numpy as np
 
-import timevec.numpy_datetime64 as tv64
 import timevec.numpy as tv
+import timevec.numpy_datetime64 as tv64
 
 
 def test_long_time_vec() -> None:

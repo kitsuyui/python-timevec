@@ -1,53 +1,53 @@
 import datetime
 import math
-from typing import Dict, Iterable, Tuple
+from collections.abc import Iterable
 
 import timevec.util as util
 
 
-def long_time_vec(dt: datetime.datetime) -> Tuple[float, float]:
+def long_time_vec(dt: datetime.datetime) -> tuple[float, float]:
     """Represent the elapsed time in the long time as a vector"""
     range = util.long_time_range(dt)
     rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate)
 
 
-def millennium_vec(dt: datetime.datetime) -> Tuple[float, float]:
+def millennium_vec(dt: datetime.datetime) -> tuple[float, float]:
     """Represent the elapsed time in the millennium as a vector"""
     range = util.millennium_range(dt)
     rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate)
 
 
-def century_vec(dt: datetime.datetime) -> Tuple[float, float]:
+def century_vec(dt: datetime.datetime) -> tuple[float, float]:
     """Represent the elapsed time in the century as a vector"""
     range = util.century_range(dt)
     rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate)
 
 
-def decade_vec(dt: datetime.datetime) -> Tuple[float, float]:
+def decade_vec(dt: datetime.datetime) -> tuple[float, float]:
     """Represent the elapsed time in the decade as a vector"""
     range = util.decade_range(dt)
     rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate)
 
 
-def year_vec(dt: datetime.datetime) -> Tuple[float, float]:
+def year_vec(dt: datetime.datetime) -> tuple[float, float]:
     """Represent the elapsed time in the year as a vector"""
     range = util.year_range(dt)
     rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate)
 
 
-def month_vec(dt: datetime.datetime) -> Tuple[float, float]:
+def month_vec(dt: datetime.datetime) -> tuple[float, float]:
     """Represent the elapsed time in the month as a vector"""
     range = util.month_range(dt)
     rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate)
 
 
-def week_vec(dt: datetime.datetime) -> Tuple[float, float]:
+def week_vec(dt: datetime.datetime) -> tuple[float, float]:
     """Represent the elapsed time in the week as a vector"""
     # weekday is 0 for Monday and 6 for Sunday
     range = util.week_range(dt)
@@ -55,14 +55,14 @@ def week_vec(dt: datetime.datetime) -> Tuple[float, float]:
     return ratio_to_vec(rate)
 
 
-def day_vec(dt: datetime.datetime) -> Tuple[float, float]:
+def day_vec(dt: datetime.datetime) -> tuple[float, float]:
     """Represent the elapsed time in the day as a vector"""
     range = util.day_range(dt)
     rate = range.time_elapsed_ratio(dt)
     return ratio_to_vec(rate)
 
 
-def ratio_to_vec(rate: float) -> Tuple[float, float]:
+def ratio_to_vec(rate: float) -> tuple[float, float]:
     """Convert a rate to a vector"""
     s = 2 * math.pi * rate
     x = math.cos(s)
@@ -81,9 +81,9 @@ def vec_to_ratio(x: float, y: float) -> float:
 def datetime_to_vecs(
     dt: datetime.datetime,
     targets: Iterable[util.TARGET],
-) -> Dict[util.TARGET, Tuple[float, float]]:
+) -> dict[util.TARGET, tuple[float, float]]:
     """Convert a datetime to a vector"""
-    d: Dict[util.TARGET, Tuple[float, float]] = {}
+    d: dict[util.TARGET, tuple[float, float]] = {}
     if "long_time" in targets:
         d["long_time"] = long_time_vec(dt)
     if "millennium" in targets:
@@ -104,7 +104,7 @@ def datetime_to_vecs(
 
 
 def datetime_from_vecs(
-    items: Dict[util.TARGET, Tuple[float, float]],
+    items: dict[util.TARGET, tuple[float, float]],
 ) -> datetime.datetime:
     """Convert a vector to a datetime"""
     # long time → millennium → century → decade → year → month → week → day
@@ -146,14 +146,14 @@ def datetime_from_vecs(
 
 
 __all__ = [
+    "century_vec",
+    "datetime_from_vecs",
+    "datetime_to_vecs",
+    "day_vec",
+    "decade_vec",
     "long_time_vec",
     "millennium_vec",
-    "century_vec",
-    "decade_vec",
-    "year_vec",
     "month_vec",
     "week_vec",
-    "day_vec",
-    "datetime_to_vecs",
-    "datetime_from_vecs",
+    "year_vec",
 ]
