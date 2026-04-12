@@ -71,7 +71,7 @@ END_OF_DATETIME = datetime.datetime(5001, 1, 1, 0, 0, 0)
 
 
 def long_time_range(
-    dt: datetime.datetime,
+    _dt: datetime.datetime,
 ) -> DateTimeRange:
     """Return a DateTimeRange that covers a long time period"""
     return DateTimeRange(
@@ -244,12 +244,12 @@ def day_range(
 
 __all__ = [
     "DateTimeRange",
+    "century_range",
+    "day_range",
+    "decade_range",
     "long_time_range",
     "millennium_range",
-    "century_range",
-    "decade_range",
-    "year_range",
     "month_range",
     "week_range",
-    "day_range",
+    "year_range",
 ]

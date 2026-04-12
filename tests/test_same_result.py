@@ -2,19 +2,20 @@
 from __future__ import annotations
 
 import datetime
-
-from typing import Callable, Tuple, List
 import random
+from collections.abc import Callable
+
+import numpy as np
+import pytest
+
 import timevec.builtin_math as tv
 import timevec.numpy as tvn
 import timevec.numpy_datetime64 as tv64
-import numpy as np
-import pytest
 
 
 def assert_same(
     dt: datetime.datetime,
-    func1: Callable[[datetime.datetime], Tuple[float, float]],
+    func1: Callable[[datetime.datetime], tuple[float, float]],
     func2: Callable[[datetime.datetime], np.ndarray],
     func3: Callable[[np.datetime64], np.ndarray],
     *,
@@ -41,12 +42,9 @@ def random_date() -> datetime.datetime:
     return datetime.datetime(year, month, day, hour, minute, second)
 
 
-def random_dates(size: int = 2000) -> List[datetime.datetime]:
+def random_dates(size: int = 2000) -> list[datetime.datetime]:
     """Return a list of random datetimes."""
-    dates = []
-    for _ in range(size):
-        dates.append(random_date())
-    return dates
+    return [random_date() for _ in range(size)]
 
 
 def test_long_time_vec() -> None:
@@ -78,7 +76,7 @@ def test_month_vec() -> None:
     for dt in test_dates:
         assert_same(dt, tv.month_vec, tvn.month_vec, tv64.month_vec)
 
-    
+
 def test_week_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:

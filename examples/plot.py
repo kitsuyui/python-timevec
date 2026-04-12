@@ -1,15 +1,17 @@
 # ja: 実際に year_vec がどのような値を返すかのグラフを描き、わかりやすくします。
 
 import datetime
-import numpy as np
-from typing import Callable, List
+from collections.abc import Callable
+
 import matplotlib.pyplot as plt
+import numpy as np
+
 import timevec.numpy as tv
 
 
-def plot_func_vec(func: Callable[[datetime.datetime], np.ndarray], dates: List[datetime.datetime]) -> None:
+def plot_func_vec(func: Callable[[datetime.datetime], np.ndarray], dates: list[datetime.datetime]) -> None:
     vecs = np.array([func(dt) for dt in dates])
-    fig, ax = plt.subplots()
+    _fig, _ax = plt.subplots()
     plt.plot(vecs)
     plt.savefig(f"examples/{func.__name__}.svg")
 

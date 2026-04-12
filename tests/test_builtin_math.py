@@ -1,7 +1,7 @@
 import datetime
+from collections.abc import Callable
 
 import pytest
-from typing import Tuple, Callable
 
 import timevec.builtin_math as tv
 import timevec.util as util
@@ -13,7 +13,7 @@ def assert_vector_in_circle(x: float, y: float, *, abs: float = 1e-6) -> None:
 
 def assert_vector_continuity(
     dt: datetime.datetime,
-    fn: Callable[[datetime.datetime], Tuple[float, float]],
+    fn: Callable[[datetime.datetime], tuple[float, float]],
     eps_timedelta: datetime.timedelta = datetime.timedelta(seconds=0.01),
 ) -> None:
     """Test that the vector is continuous and in the same basis"""
@@ -42,7 +42,7 @@ def assert_vector_continuity(
 
 def assert_range_vector_value(
     range: util.DateTimeRange,
-    fn: Callable[[datetime.datetime], Tuple[float, float]],
+    fn: Callable[[datetime.datetime], tuple[float, float]],
     *,
     abs: float = 1e-6,
 ) -> None:
