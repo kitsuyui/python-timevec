@@ -1,8 +1,11 @@
 import datetime
 import math
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 import timevec.util as util
+
+BuiltinVecFactory = Callable[[datetime.datetime], tuple[float, float]]
+RangeFactory = Callable[[datetime.datetime], util.DateTimeRange]
 
 
 def long_time_vec(dt: datetime.datetime) -> tuple[float, float]:
@@ -78,70 +81,59 @@ def vec_to_ratio(x: float, y: float) -> float:
     return angle if angle >= 0 else angle + 1.0
 
 
+BUILTIN_VEC_FACTORIES: tuple[tuple[util.TARGET, BuiltinVecFactory], ...] = (
+    ("long_time", long_time_vec),
+    ("millennium", millennium_vec),
+    ("century", century_vec),
+    ("decade", decade_vec),
+    ("year", year_vec),
+    ("month", month_vec),
+    ("week", week_vec),
+    ("day", day_vec),
+)
+
+RANGE_FACTORIES: tuple[tuple[util.TARGET, RangeFactory], ...] = (
+    ("long_time", util.long_time_range),
+    ("millennium", util.millennium_range),
+    ("century", util.century_range),
+    ("decade", util.decade_range),
+    ("year", util.year_range),
+    ("month", util.month_range),
+    ("week", util.week_range),
+    ("day", util.day_range),
+)
+
+
+def present_ranges(
+    items: dict[util.TARGET, tuple[float, float]],
+) -> Iterable[tuple[RangeFactory, tuple[float, float]]]:
+    for target, range_factory in RANGE_FACTORIES:
+        value = items.get(target)
+        if value is not None:
+            yield range_factory, value
+
+
 def datetime_to_vecs(
     dt: datetime.datetime,
     targets: Iterable[util.TARGET],
 ) -> dict[util.TARGET, tuple[float, float]]:
     """Convert a datetime to a vector"""
-    d: dict[util.TARGET, tuple[float, float]] = {}
-    if "long_time" in targets:
-        d["long_time"] = long_time_vec(dt)
-    if "millennium" in targets:
-        d["millennium"] = millennium_vec(dt)
-    if "century" in targets:
-        d["century"] = century_vec(dt)
-    if "decade" in targets:
-        d["decade"] = decade_vec(dt)
-    if "year" in targets:
-        d["year"] = year_vec(dt)
-    if "month" in targets:
-        d["month"] = month_vec(dt)
-    if "week" in targets:
-        d["week"] = week_vec(dt)
-    if "day" in targets:
-        d["day"] = day_vec(dt)
-    return d
+    target_set = set(targets)
+    return {
+        target: factory(dt)
+        for target, factory in BUILTIN_VEC_FACTORIES
+        if target in target_set
+    }
 
 
 def datetime_from_vecs(
     items: dict[util.TARGET, tuple[float, float]],
 ) -> datetime.datetime:
     """Convert a vector to a datetime"""
-    # long time → millennium → century → decade → year → month → week → day
     t = util.BEGIN_OF_DATETIME
-
-    if "long_time" in items:
-        range = util.long_time_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(*items["long_time"]))
-
-    if "millennium" in items:
-        range = util.millennium_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(*items["millennium"]))
-
-    if "century" in items:
-        range = util.century_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(*items["century"]))
-
-    if "decade" in items:
-        range = util.decade_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(*items["decade"]))
-
-    if "year" in items:
-        range = util.year_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(*items["year"]))
-
-    if "month" in items:
-        range = util.month_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(*items["month"]))
-
-    if "week" in items:
-        range = util.week_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(*items["week"]))
-
-    if "day" in items:
-        range = util.day_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(*items["day"]))
-
+    for range_factory, value in present_ranges(items):
+        range = range_factory(t)
+        t = range.current_time_by_ratio(vec_to_ratio(*value))
     return t
 
 

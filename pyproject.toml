@@ -126,7 +126,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.mccabe]
-max-complexity = 9
+max-complexity = 4
 
 [tool.mypy]
 strict = true
