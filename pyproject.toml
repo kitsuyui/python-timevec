@@ -125,6 +125,9 @@ ignore = [
     "S311",
 ]
 
+[tool.ruff.lint.mccabe]
+max-complexity = 4
+
 [tool.mypy]
 strict = true
 ignore_missing_imports = false

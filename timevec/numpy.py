@@ -1,10 +1,13 @@
 import datetime
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 import numpy as np
 import numpy.typing as npt
 
 import timevec.util as util
+
+NumpyVecFactory = Callable[[datetime.datetime], npt.NDArray]
+NumpyRangeFactory = Callable[[datetime.datetime], util.DateTimeRange]
 
 
 def long_time_vec(
@@ -97,6 +100,45 @@ def vec_to_ratio(arr: npt.NDArray) -> float:
     return float(base if base >= 0.0 else base + 1.0)
 
 
+NUMPY_RANGE_FACTORIES: tuple[tuple[util.TARGET, NumpyRangeFactory], ...] = (
+    ("long_time", util.long_time_range),
+    ("millennium", util.millennium_range),
+    ("century", util.century_range),
+    ("decade", util.decade_range),
+    ("year", util.year_range),
+    ("month", util.month_range),
+    ("week", util.week_range),
+    ("day", util.day_range),
+)
+
+
+def numpy_vec_factories(
+    *, dtype: npt.DTypeLike,
+) -> tuple[
+    tuple[util.TARGET, Callable[[datetime.datetime], npt.NDArray]],
+    ...,
+]:
+    return (
+        ("long_time", lambda dt: long_time_vec(dt, dtype=dtype)),
+        ("millennium", lambda dt: millennium_vec(dt, dtype=dtype)),
+        ("century", lambda dt: century_vec(dt, dtype=dtype)),
+        ("decade", lambda dt: decade_vec(dt, dtype=dtype)),
+        ("year", lambda dt: year_vec(dt, dtype=dtype)),
+        ("month", lambda dt: month_vec(dt, dtype=dtype)),
+        ("week", lambda dt: week_vec(dt, dtype=dtype)),
+        ("day", lambda dt: day_vec(dt, dtype=dtype)),
+    )
+
+
+def present_numpy_ranges(
+    items: dict[util.TARGET, npt.NDArray],
+) -> Iterable[tuple[NumpyRangeFactory, npt.NDArray]]:
+    for target, range_factory in NUMPY_RANGE_FACTORIES:
+        value = items.get(target)
+        if value is not None:
+            yield range_factory, value
+
+
 def datetime_to_vecs(
     dt: datetime.datetime,
     targets: Iterable[util.TARGET],
@@ -104,65 +146,22 @@ def datetime_to_vecs(
     dtype: npt.DTypeLike = np.float64,
 ) -> dict[util.TARGET, npt.NDArray]:
     """Convert a datetime to a vector"""
-    d: dict[util.TARGET, npt.NDArray] = {}
-    if "long_time" in targets:
-        d["long_time"] = long_time_vec(dt, dtype=dtype)
-    if "millennium" in targets:
-        d["millennium"] = millennium_vec(dt, dtype=dtype)
-    if "century" in targets:
-        d["century"] = century_vec(dt, dtype=dtype)
-    if "decade" in targets:
-        d["decade"] = decade_vec(dt, dtype=dtype)
-    if "year" in targets:
-        d["year"] = year_vec(dt, dtype=dtype)
-    if "month" in targets:
-        d["month"] = month_vec(dt, dtype=dtype)
-    if "week" in targets:
-        d["week"] = week_vec(dt, dtype=dtype)
-    if "day" in targets:
-        d["day"] = day_vec(dt, dtype=dtype)
-    return d
+    target_set = set(targets)
+    return {
+        target: factory(dt)
+        for target, factory in numpy_vec_factories(dtype=dtype)
+        if target in target_set
+    }
 
 
 def datetime_from_vecs(
     items: dict[util.TARGET, npt.NDArray],
 ) -> datetime.datetime:
     """Convert a vector to a datetime"""
-    # long time → millennium → century → decade → year → month → week → day
     t = util.BEGIN_OF_DATETIME
-
-    if "long_time" in items:
-        range = util.long_time_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(items["long_time"]))
-
-    if "millennium" in items:
-        range = util.millennium_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(items["millennium"]))
-
-    if "century" in items:
-        range = util.century_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(items["century"]))
-
-    if "decade" in items:
-        range = util.decade_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(items["decade"]))
-
-    if "year" in items:
-        range = util.year_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(items["year"]))
-
-    if "month" in items:
-        range = util.month_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(items["month"]))
-
-    if "week" in items:
-        range = util.week_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(items["week"]))
-
-    if "day" in items:
-        range = util.day_range(t)
-        t = range.current_time_by_ratio(vec_to_ratio(items["day"]))
-
+    for range_factory, value in present_numpy_ranges(items):
+        range = range_factory(t)
+        t = range.current_time_by_ratio(vec_to_ratio(value))
     return t
 
 
