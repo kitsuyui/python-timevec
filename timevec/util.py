@@ -130,8 +130,9 @@ def decade_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
     """Return a DateTimeRange that covers a decade"""
+    decade_start_year = (dt.year - 1) // 10 * 10 + 1
     begin_of_decade = datetime.datetime.min.replace(
-        year=dt.year // 10 * 10,
+        year=decade_start_year,
         month=1,
         day=1,
         hour=0,
@@ -139,7 +140,7 @@ def decade_range(
         second=0,
     )
     end_of_decade = datetime.datetime.min.replace(
-        year=dt.year // 10 * 10 + 10,
+        year=decade_start_year + 10,
         month=1,
         day=1,
         hour=0,
