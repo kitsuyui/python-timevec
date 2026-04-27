@@ -4,6 +4,7 @@ from timevec.util import (
     DateTimeRange,
     century_range,
     day_range,
+    decade_range,
     long_time_range,
     millennium_range,
     month_range,
@@ -63,6 +64,14 @@ def test_century_range() -> None:
     assert range.begin == datetime.datetime(1901, 1, 1)
     assert range.end == datetime.datetime(2001, 1, 1)
     assert range.total_time == datetime.timedelta(days=36525)
+
+
+def test_decade_range_near_datetime_min() -> None:
+    """Test decade_range() for years where 0-based decade math underflows."""
+    range = decade_range(datetime.datetime(1, 1, 1))
+    assert_date_time_range(range)
+    assert range.begin == datetime.datetime(1, 1, 1)
+    assert range.end == datetime.datetime(11, 1, 1)
 
 
 def test_year_range() -> None:

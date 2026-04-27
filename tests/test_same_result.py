@@ -23,7 +23,6 @@ def assert_same(
     abs_tol: float = 0.0,
 ) -> None:
     """Assert that the functions return the same result."""
-    dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
     result1 = func1(dt)
     result2 = func2(dt)
     result3 = func3(np.datetime64(dt))
