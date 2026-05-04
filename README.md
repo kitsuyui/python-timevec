@@ -22,15 +22,39 @@ This is called a time vector.
 
 # Installation
 
+The base package has no NumPy dependency and supports
+`timevec.builtin_math`:
+
 ```sh
 pip install timevec
 ```
 
+Install the `numpy` extra when you use `timevec.numpy` or
+`timevec.numpy_datetime64`:
+
+```sh
+pip install "timevec[numpy]"
+```
+
 # Usage
 
+With the base install:
+
 ```python
-import timevec.numpy as tv
 import datetime
+import timevec.builtin_math as tv
+
+dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
+vec = tv.year_vec(dt)
+# (1.0, 0.0)
+```
+
+With the `numpy` extra:
+
+```python
+import datetime
+import timevec.numpy as tv
+
 dt = datetime.datetime(2020, 1, 1, 0, 0, 0)
 vec = tv.year_vec(dt)
 # array([1., 0.])
