@@ -9,7 +9,9 @@ import timevec.util as util
 
 
 def long_time_vec(
-    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64,
+    dt: np.datetime64,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the long time as a vector"""
     dt2 = datetime64_to_datetime(dt)
@@ -19,7 +21,9 @@ def long_time_vec(
 
 
 def millennium_vec(
-    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64,
+    dt: np.datetime64,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the millennium as a vector"""
     dt2 = datetime64_to_datetime(dt)
@@ -29,7 +33,9 @@ def millennium_vec(
 
 
 def century_vec(
-    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64,
+    dt: np.datetime64,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the century as a vector"""
     dt2 = datetime64_to_datetime(dt)
@@ -39,7 +45,9 @@ def century_vec(
 
 
 def year_vec(
-    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64,
+    dt: np.datetime64,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the year as a vector"""
     dt2 = datetime64_to_datetime(dt)
@@ -49,7 +57,9 @@ def year_vec(
 
 
 def month_vec(
-    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64,
+    dt: np.datetime64,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the month as a vector"""
     dt2 = datetime64_to_datetime(dt)
@@ -59,7 +69,9 @@ def month_vec(
 
 
 def week_vec(
-    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64,
+    dt: np.datetime64,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the week as a vector"""
     dt2 = datetime64_to_datetime(dt)
@@ -69,7 +81,9 @@ def week_vec(
 
 
 def day_vec(
-    dt: np.datetime64, *, dtype: npt.DTypeLike = np.float64,
+    dt: np.datetime64,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the day as a vector"""
     dt2 = datetime64_to_datetime(dt)
@@ -84,7 +98,8 @@ def datetime64_to_datetime(dt: np.datetime64) -> datetime.datetime:
     ts = float(
         (dt64 - np.datetime64("1970-01-01T00:00:00")) / np.timedelta64(1, "s"),
     )
-    return datetime.datetime.utcfromtimestamp(ts)
+    aware = datetime.datetime.fromtimestamp(ts, tz=datetime.timezone.utc)
+    return aware.replace(tzinfo=None)
 
 
 def datetime_to_datetime64(dt: datetime.datetime) -> np.datetime64:
