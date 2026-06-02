@@ -11,7 +11,9 @@ NumpyRangeFactory = Callable[[datetime.datetime], util.DateTimeRange]
 
 
 def long_time_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64,
+    dt: datetime.datetime,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the long time as a vector"""
     range = util.long_time_range(dt)
@@ -20,7 +22,9 @@ def long_time_vec(
 
 
 def millennium_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64,
+    dt: datetime.datetime,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the millennium as a vector"""
     range = util.millennium_range(dt)
@@ -29,7 +33,9 @@ def millennium_vec(
 
 
 def century_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64,
+    dt: datetime.datetime,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the century as a vector"""
     range = util.century_range(dt)
@@ -38,7 +44,9 @@ def century_vec(
 
 
 def decade_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64,
+    dt: datetime.datetime,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the decade as a vector"""
     range = util.decade_range(dt)
@@ -47,7 +55,9 @@ def decade_vec(
 
 
 def year_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64,
+    dt: datetime.datetime,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the year as a vector"""
     range = util.year_range(dt)
@@ -56,7 +66,9 @@ def year_vec(
 
 
 def month_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64,
+    dt: datetime.datetime,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the month as a vector"""
     range = util.month_range(dt)
@@ -65,7 +77,9 @@ def month_vec(
 
 
 def week_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64,
+    dt: datetime.datetime,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the week as a vector"""
     range = util.week_range(dt)
@@ -74,7 +88,9 @@ def week_vec(
 
 
 def day_vec(
-    dt: datetime.datetime, *, dtype: npt.DTypeLike = np.float64,
+    dt: datetime.datetime,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the elapsed time in the day as a vector"""
     range = util.day_range(dt)
@@ -83,7 +99,9 @@ def day_vec(
 
 
 def ratio_to_vec(
-    ratio: float, *, dtype: npt.DTypeLike = np.float64,
+    ratio: float,
+    *,
+    dtype: npt.DTypeLike = np.float64,
 ) -> npt.NDArray:
     """Represent the ratio as a vector"""
     vec = np.zeros(2, dtype=dtype)
@@ -94,6 +112,11 @@ def ratio_to_vec(
 
 def vec_to_ratio(arr: npt.NDArray) -> float:
     """Convert a vector to a ratio"""
+    if arr[0] == 0.0 and arr[1] == 0.0:
+        raise ValueError(
+            "vec_to_ratio received a zero vector (0, 0);"
+            " input must be a unit vector",
+        )
     # atan2 returns a value in the range [-pi, pi]
     # so we need to convert it to the range [0, 2*pi]
     base = np.arctan2(arr[1], arr[0]) / (2.0 * np.pi)
@@ -113,7 +136,8 @@ NUMPY_RANGE_FACTORIES: tuple[tuple[util.TARGET, NumpyRangeFactory], ...] = (
 
 
 def numpy_vec_factories(
-    *, dtype: npt.DTypeLike,
+    *,
+    dtype: npt.DTypeLike,
 ) -> tuple[
     tuple[util.TARGET, Callable[[datetime.datetime], npt.NDArray]],
     ...,
