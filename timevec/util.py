@@ -20,6 +20,12 @@ class DateTimeRange:
     begin: datetime.datetime
     end: datetime.datetime
 
+    def __post_init__(self) -> None:
+        if self.begin > self.end:
+            raise ValueError(
+                f"begin must not be after end: {self.begin!r} > {self.end!r}",
+            )
+
     @property
     def total_time(self) -> datetime.timedelta:
         return self.end - self.begin
