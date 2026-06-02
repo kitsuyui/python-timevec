@@ -1,12 +1,13 @@
 import datetime
 from collections.abc import Callable, Iterable
+from typing import Any
 
 import numpy as np
 import numpy.typing as npt
 
 import timevec.util as util
 
-NumpyVecFactory = Callable[[datetime.datetime], npt.NDArray]
+NumpyVecFactory = Callable[[datetime.datetime], npt.NDArray[Any]]
 NumpyRangeFactory = Callable[[datetime.datetime], util.DateTimeRange]
 
 
@@ -14,7 +15,7 @@ def long_time_vec(
     dt: datetime.datetime,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the long time as a vector"""
     range = util.long_time_range(dt)
     rate = range.time_elapsed_ratio(dt)
@@ -25,7 +26,7 @@ def millennium_vec(
     dt: datetime.datetime,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the millennium as a vector"""
     range = util.millennium_range(dt)
     rate = range.time_elapsed_ratio(dt)
@@ -36,7 +37,7 @@ def century_vec(
     dt: datetime.datetime,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the century as a vector"""
     range = util.century_range(dt)
     rate = range.time_elapsed_ratio(dt)
@@ -47,7 +48,7 @@ def decade_vec(
     dt: datetime.datetime,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the decade as a vector"""
     range = util.decade_range(dt)
     rate = range.time_elapsed_ratio(dt)
@@ -58,7 +59,7 @@ def year_vec(
     dt: datetime.datetime,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the year as a vector"""
     range = util.year_range(dt)
     rate = range.time_elapsed_ratio(dt)
@@ -69,7 +70,7 @@ def month_vec(
     dt: datetime.datetime,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the month as a vector"""
     range = util.month_range(dt)
     rate = range.time_elapsed_ratio(dt)
@@ -80,7 +81,7 @@ def week_vec(
     dt: datetime.datetime,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the week as a vector"""
     range = util.week_range(dt)
     rate = range.time_elapsed_ratio(dt)
@@ -91,7 +92,7 @@ def day_vec(
     dt: datetime.datetime,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the day as a vector"""
     range = util.day_range(dt)
     rate = range.time_elapsed_ratio(dt)
@@ -102,7 +103,7 @@ def ratio_to_vec(
     ratio: float,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the ratio as a vector"""
     vec = np.zeros(2, dtype=dtype)
     vec[0] = np.cos(2.0 * np.pi * ratio)
@@ -110,7 +111,7 @@ def ratio_to_vec(
     return vec
 
 
-def vec_to_ratio(arr: npt.NDArray) -> float:
+def vec_to_ratio(arr: npt.NDArray[Any]) -> float:
     """Convert a vector to a ratio"""
     if arr[0] == 0.0 and arr[1] == 0.0:
         raise ValueError(
@@ -139,7 +140,7 @@ def numpy_vec_factories(
     *,
     dtype: npt.DTypeLike,
 ) -> tuple[
-    tuple[util.TARGET, Callable[[datetime.datetime], npt.NDArray]],
+    tuple[util.TARGET, Callable[[datetime.datetime], npt.NDArray[Any]]],
     ...,
 ]:
     return (
@@ -155,8 +156,8 @@ def numpy_vec_factories(
 
 
 def present_numpy_ranges(
-    items: dict[util.TARGET, npt.NDArray],
-) -> Iterable[tuple[NumpyRangeFactory, npt.NDArray]]:
+    items: dict[util.TARGET, npt.NDArray[Any]],
+) -> Iterable[tuple[NumpyRangeFactory, npt.NDArray[Any]]]:
     for target, range_factory in NUMPY_RANGE_FACTORIES:
         value = items.get(target)
         if value is not None:
@@ -168,7 +169,7 @@ def datetime_to_vecs(
     targets: Iterable[util.TARGET],
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> dict[util.TARGET, npt.NDArray]:
+) -> dict[util.TARGET, npt.NDArray[Any]]:
     """Convert a datetime to a vector"""
     target_set = set(targets)
     return {
@@ -179,7 +180,7 @@ def datetime_to_vecs(
 
 
 def datetime_from_vecs(
-    items: dict[util.TARGET, npt.NDArray],
+    items: dict[util.TARGET, npt.NDArray[Any]],
 ) -> datetime.datetime:
     """Convert a vector to a datetime"""
     t = util.BEGIN_OF_DATETIME
