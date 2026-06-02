@@ -23,10 +23,10 @@ with contextlib.suppress(ImportError):
     from . import builtin_math
 
 with contextlib.suppress(ImportError):
-    from . import numpy_datetime64
-
-with contextlib.suppress(ImportError):
-    from . import numpy
+    from . import (
+        numpy,
+        numpy_datetime64,  # depends on timevec.numpy
+    )
 
 
 __all__ = ["__version__", "builtin_math", "numpy", "numpy_datetime64"]
