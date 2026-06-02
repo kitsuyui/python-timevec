@@ -1,5 +1,7 @@
 import datetime
 
+import pytest
+
 from timevec.util import (
     DateTimeRange,
     century_range,
@@ -35,6 +37,14 @@ def test_date_time_range() -> None:
     assert range.begin == datetime.datetime(2000, 1, 1)
     assert range.end == datetime.datetime(2000, 1, 2)
     assert range.total_time == datetime.timedelta(days=1)
+
+
+def test_date_time_range_inverted_raises() -> None:
+    """DateTimeRange with begin > end must raise ValueError."""
+    with pytest.raises(ValueError):
+        DateTimeRange(
+            datetime.datetime(2000, 1, 2), datetime.datetime(2000, 1, 1),
+        )
 
 
 def test_long_time_range() -> None:
