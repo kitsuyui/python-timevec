@@ -183,3 +183,13 @@ def test_edge_cases() -> None:
 def test_vec_to_ratio_zero_vector_raises() -> None:
     with pytest.raises(ValueError):
         tv.vec_to_ratio(0.0, 0.0)
+
+
+def test_datetime_from_vecs_empty_raises() -> None:
+    with pytest.raises(ValueError, match="No recognized time targets"):
+        tv.datetime_from_vecs({})
+
+
+def test_datetime_from_vecs_unrecognized_keys_raises() -> None:
+    with pytest.raises(ValueError, match="No recognized time targets"):
+        tv.datetime_from_vecs({"unknown_key": (0.5, 0.5)})  # type: ignore[dict-item]
