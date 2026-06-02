@@ -1,4 +1,5 @@
 import datetime
+import math
 from collections.abc import Iterable
 
 import numpy as np
@@ -123,7 +124,9 @@ def datetime_to_datetime64(dt: datetime.datetime) -> np.datetime64:
     else:
         dt_utc = dt
     ts = dt_utc.timestamp()
-    return np.datetime64("1970-01-01T00:00:00") + np.timedelta64(int(ts), "s")
+    return np.datetime64("1970-01-01T00:00:00") + np.timedelta64(
+        math.floor(ts), "s",
+    )
 
 
 def datetime64_to_vecs(

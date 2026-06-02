@@ -8,6 +8,7 @@ import pytest
 
 import timevec.numpy as tv
 import timevec.numpy_datetime64 as tv64
+from timevec.numpy_datetime64 import datetime_to_datetime64
 
 
 @pytest.fixture
@@ -63,6 +64,16 @@ def test_day_vec() -> None:
     dt = datetime.datetime.now()
     dt64 = np.datetime64(dt)
     assert np.allclose(tv64.day_vec(dt64), tv.day_vec(dt))
+
+
+def test_datetime_to_datetime64_pre_epoch_floor() -> None:
+    # pre-epoch datetime with sub-second uses math.floor (toward -inf), not int() (toward zero).
+    # For a negative timestamp, int() truncates toward zero = 1 second too late.
+    # math.floor() truncates toward -inf = correct second boundary.
+    dt = datetime.datetime(1950, 6, 15, 12, 0, 0, 500000, tzinfo=datetime.timezone.utc)
+    result = datetime_to_datetime64(dt)
+    # floor of 1950-06-15T12:00:00.5 UTC → 1950-06-15T12:00:00 (not T12:00:01)
+    assert result == np.datetime64("1950-06-15T12:00:00")
 
 
 def test_multiple_datetime64() -> None:
