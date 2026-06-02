@@ -25,7 +25,14 @@ def timezone() -> Iterator[None]:
 
 def test_datetime_to_datetime64_preserves_microseconds() -> None:
     dt = datetime.datetime(
-        2024, 1, 1, 12, 0, 0, 500000, tzinfo=datetime.timezone.utc,
+        2024,
+        1,
+        1,
+        12,
+        0,
+        0,
+        500000,
+        tzinfo=datetime.timezone.utc,
     )
     dt64 = tv64.datetime_to_datetime64(dt)
     dt_back = tv64.datetime64_to_datetime(dt64)

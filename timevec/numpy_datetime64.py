@@ -124,7 +124,8 @@ def datetime_to_datetime64(dt: datetime.datetime) -> np.datetime64:
         dt_utc = dt
     ts = dt_utc.timestamp()
     return np.datetime64("1970-01-01T00:00:00") + np.timedelta64(
-        round(ts * 1_000_000), "us",
+        round(ts * 1_000_000),
+        "us",
     )
 
 

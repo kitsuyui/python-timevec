@@ -49,10 +49,12 @@ def assert_range_vector_value(
     assert fn(range.begin) == pytest.approx((1.0, 0.0), abs=abs)
     assert fn(range.end_of_first_quarter) == pytest.approx((0.0, 1.0), abs=abs)
     assert fn(range.end_of_second_quarter) == pytest.approx(
-        (-1.0, 0.0), abs=abs,
+        (-1.0, 0.0),
+        abs=abs,
     )
     assert fn(range.end_of_third_quarter) == pytest.approx(
-        (0.0, -1.0), abs=abs,
+        (0.0, -1.0),
+        abs=abs,
     )
     assert fn(range.end) == pytest.approx((1.0, 0.0), abs=abs)
 
