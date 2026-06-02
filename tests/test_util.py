@@ -31,7 +31,8 @@ def assert_date_time_range(range: DateTimeRange) -> None:
 def test_date_time_range() -> None:
     """Test DateTimeRange"""
     range = DateTimeRange(
-        datetime.datetime(2000, 1, 1), datetime.datetime(2000, 1, 2),
+        datetime.datetime(2000, 1, 1),
+        datetime.datetime(2000, 1, 2),
     )
     assert_date_time_range(range)
     assert range.begin == datetime.datetime(2000, 1, 1)
