@@ -66,7 +66,12 @@ def day_vec(dt: datetime.datetime) -> tuple[float, float]:
 
 
 def ratio_to_vec(rate: float) -> tuple[float, float]:
-    """Convert a rate to a vector"""
+    """Convert a rate in [0, 1) to a unit-circle vector.
+
+    Raises ``ValueError`` for NaN or infinite inputs.
+    """
+    if not math.isfinite(rate):
+        raise ValueError(f"rate must be a finite float, got {rate!r}")
     s = 2 * math.pi * rate
     x = math.cos(s)
     y = math.sin(s)

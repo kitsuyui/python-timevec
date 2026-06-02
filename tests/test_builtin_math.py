@@ -156,6 +156,15 @@ def test_day_vec() -> None:
     assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
 
 
+def test_ratio_to_vec_rejects_nan_and_inf() -> None:
+    with pytest.raises(ValueError, match="finite"):
+        tv.ratio_to_vec(float("nan"))
+    with pytest.raises(ValueError, match="finite"):
+        tv.ratio_to_vec(float("inf"))
+    with pytest.raises(ValueError, match="finite"):
+        tv.ratio_to_vec(float("-inf"))
+
+
 def test_edge_cases() -> None:
     # beginning of year
     dt = datetime.datetime(2023, 1, 1, 0, 0, 0)
