@@ -44,6 +44,18 @@ def century_vec(
     return tvn.ratio_to_vec(rate, dtype=dtype)
 
 
+def decade_vec(
+    dt: np.datetime64,
+    *,
+    dtype: npt.DTypeLike = np.float64,
+) -> npt.NDArray:
+    """Represent the elapsed time in the decade as a vector"""
+    dt2 = datetime64_to_datetime(dt)
+    range = util.decade_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
+    return tvn.ratio_to_vec(rate, dtype=dtype)
+
+
 def year_vec(
     dt: np.datetime64,
     *,
@@ -98,13 +110,19 @@ def datetime64_to_datetime(dt: np.datetime64) -> datetime.datetime:
     ts = float(
         (dt64 - np.datetime64("1970-01-01T00:00:00")) / np.timedelta64(1, "s"),
     )
-    aware = datetime.datetime.fromtimestamp(ts, tz=datetime.timezone.utc)
-    return aware.replace(tzinfo=None)
+    return datetime.datetime.fromtimestamp(
+        ts,
+        datetime.timezone.utc,
+    ).replace(tzinfo=None)
 
 
 def datetime_to_datetime64(dt: datetime.datetime) -> np.datetime64:
     """Convert a datetime.datetime to a numpy.datetime64"""
-    ts = dt.timestamp()
+    if dt.tzinfo is None:
+        dt_utc = dt.replace(tzinfo=datetime.timezone.utc)
+    else:
+        dt_utc = dt
+    ts = dt_utc.timestamp()
     return np.datetime64("1970-01-01T00:00:00") + np.timedelta64(int(ts), "s")
 
 
@@ -132,6 +150,7 @@ __all__ = [
     "datetime64_from_vecs",
     "datetime64_to_vecs",
     "day_vec",
+    "decade_vec",
     "long_time_vec",
     "millennium_vec",
     "month_vec",

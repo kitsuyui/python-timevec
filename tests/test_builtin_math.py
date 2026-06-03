@@ -178,3 +178,8 @@ def test_edge_cases() -> None:
     dt = datetime.datetime(2023, 12, 31, 23, 59, 59, 999999)
     x, y = tv.year_vec(dt)
     assert (x, y) == pytest.approx((1.0, 0.0), abs=1e-6)
+
+
+def test_vec_to_ratio_zero_vector_raises() -> None:
+    with pytest.raises(ValueError):
+        tv.vec_to_ratio(0.0, 0.0)

@@ -75,6 +75,11 @@ def ratio_to_vec(rate: float) -> tuple[float, float]:
 
 def vec_to_ratio(x: float, y: float) -> float:
     """Convert a vector to a rate"""
+    if x == 0.0 and y == 0.0:
+        raise ValueError(
+            "vec_to_ratio received a zero vector (0, 0);"
+            " input must be a unit vector",
+        )
     # atan2 returns a value in the range [-pi, pi]
     # so we need to convert it to the range [0, 2*pi]
     angle = math.atan2(y, x) / (2.0 * math.pi)
