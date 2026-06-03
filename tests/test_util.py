@@ -47,6 +47,15 @@ def test_date_time_range_inverted_raises() -> None:
         )
 
 
+def test_time_elapsed_ratio_rejects_zero_duration_range() -> None:
+    """Test zero-duration DateTimeRange elapsed ratio contract."""
+    instant = datetime.datetime(2000, 1, 1)
+    range = DateTimeRange(instant, instant)
+
+    with pytest.raises(ValueError, match="non-zero duration"):
+        range.time_elapsed_ratio(instant)
+
+
 def test_long_time_range() -> None:
     """Test long_time_range()"""
     range = long_time_range(datetime.datetime(2000, 1, 1))

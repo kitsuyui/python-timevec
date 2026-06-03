@@ -54,10 +54,14 @@ class DateTimeRange:
         return self.begin + self.elapsed_time_by_ratio(ratio)
 
     def time_elapsed_ratio(self, current: datetime.datetime) -> float:
-        return (
-            self.elapsed_time(current).total_seconds()
-            / self.total_time.total_seconds()
-        )
+        total_seconds = self.total_time.total_seconds()
+        if total_seconds == 0.0:
+            msg = (
+                "DateTimeRange.time_elapsed_ratio() requires a non-zero "
+                "duration"
+            )
+            raise ValueError(msg)
+        return self.elapsed_time(current).total_seconds() / total_seconds
 
     @property
     def end_of_first_quarter(self) -> datetime.datetime:

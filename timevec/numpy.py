@@ -112,6 +112,11 @@ def ratio_to_vec(
 
 def vec_to_ratio(arr: npt.NDArray) -> float:
     """Convert a vector to a ratio"""
+    if arr[0] == 0.0 and arr[1] == 0.0:
+        raise ValueError(
+            "vec_to_ratio received a zero vector (0, 0);"
+            " input must be a unit vector",
+        )
     # atan2 returns a value in the range [-pi, pi]
     # so we need to convert it to the range [0, 2*pi]
     base = np.arctan2(arr[1], arr[0]) / (2.0 * np.pi)
@@ -189,6 +194,7 @@ __all__ = [
     "datetime_from_vecs",
     "datetime_to_vecs",
     "day_vec",
+    "decade_vec",
     "long_time_vec",
     "millennium_vec",
     "month_vec",
