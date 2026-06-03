@@ -110,12 +110,19 @@ def datetime64_to_datetime(dt: np.datetime64) -> datetime.datetime:
     ts = float(
         (dt64 - np.datetime64("1970-01-01T00:00:00")) / np.timedelta64(1, "s"),
     )
-    return datetime.datetime.utcfromtimestamp(ts)
+    return datetime.datetime.fromtimestamp(
+        ts,
+        datetime.timezone.utc,
+    ).replace(tzinfo=None)
 
 
 def datetime_to_datetime64(dt: datetime.datetime) -> np.datetime64:
     """Convert a datetime.datetime to a numpy.datetime64"""
-    ts = dt.timestamp()
+    if dt.tzinfo is None:
+        dt_utc = dt.replace(tzinfo=datetime.timezone.utc)
+    else:
+        dt_utc = dt
+    ts = dt_utc.timestamp()
     return np.datetime64("1970-01-01T00:00:00") + np.timedelta64(int(ts), "s")
 
 
