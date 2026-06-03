@@ -1,5 +1,7 @@
 import datetime
 
+import pytest
+
 from timevec.util import (
     DateTimeRange,
     century_range,
@@ -35,6 +37,15 @@ def test_date_time_range() -> None:
     assert range.begin == datetime.datetime(2000, 1, 1)
     assert range.end == datetime.datetime(2000, 1, 2)
     assert range.total_time == datetime.timedelta(days=1)
+
+
+def test_time_elapsed_ratio_rejects_zero_duration_range() -> None:
+    """Test zero-duration DateTimeRange elapsed ratio contract."""
+    instant = datetime.datetime(2000, 1, 1)
+    range = DateTimeRange(instant, instant)
+
+    with pytest.raises(ValueError, match="non-zero duration"):
+        range.time_elapsed_ratio(instant)
 
 
 def test_long_time_range() -> None:
