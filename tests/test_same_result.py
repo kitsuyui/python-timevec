@@ -4,8 +4,10 @@ from __future__ import annotations
 import datetime
 import random
 from collections.abc import Callable
+from typing import Any
 
 import numpy as np
+import numpy.typing as npt
 import pytest
 
 import timevec.builtin_math as tv
@@ -16,8 +18,8 @@ import timevec.numpy_datetime64 as tv64
 def assert_same(
     dt: datetime.datetime,
     func1: Callable[[datetime.datetime], tuple[float, float]],
-    func2: Callable[[datetime.datetime], np.ndarray],
-    func3: Callable[[np.datetime64], np.ndarray],
+    func2: Callable[[datetime.datetime], npt.NDArray[Any]],
+    func3: Callable[[np.datetime64], npt.NDArray[Any]],
     *,
     rel_tol: float = 1e-9,
     abs_tol: float = 0.0,
@@ -26,8 +28,16 @@ def assert_same(
     result1 = func1(dt)
     result2 = func2(dt)
     result3 = func3(np.datetime64(dt))
-    assert pytest.approx(result1[0], rel=rel_tol, abs=abs_tol) == result2[0] == result3[0]
-    assert pytest.approx(result1[1], rel=rel_tol, abs=abs_tol) == result2[1] == result3[1]
+    assert (
+        pytest.approx(result1[0], rel=rel_tol, abs=abs_tol)
+        == result2[0]
+        == result3[0]
+    )
+    assert (
+        pytest.approx(result1[1], rel=rel_tol, abs=abs_tol)
+        == result2[1]
+        == result3[1]
+    )
 
 
 def random_date() -> datetime.datetime:
@@ -49,13 +59,23 @@ def random_dates(size: int = 2000) -> list[datetime.datetime]:
 def test_long_time_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:
-        assert_same(dt, tv.long_time_vec, tvn.long_time_vec, tv64.long_time_vec)
+        assert_same(
+            dt,
+            tv.long_time_vec,
+            tvn.long_time_vec,
+            tv64.long_time_vec,
+        )
 
 
 def test_millennium_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:
-        assert_same(dt, tv.millennium_vec, tvn.millennium_vec, tv64.millennium_vec)
+        assert_same(
+            dt,
+            tv.millennium_vec,
+            tvn.millennium_vec,
+            tv64.millennium_vec,
+        )
 
 
 def test_century_vec() -> None:

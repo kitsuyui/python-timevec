@@ -23,7 +23,16 @@ def test_many_dates() -> None:
             "week",
             "day",
         ]
-    ] = ["long_time", "millennium", "century", "decade", "year", "month", "week", "day"]
+    ] = [
+        "long_time",
+        "millennium",
+        "century",
+        "decade",
+        "year",
+        "month",
+        "week",
+        "day",
+    ]
     minimal: Iterable[Literal["long_time", "century", "year", "day"]] = [
         "long_time",
         "century",

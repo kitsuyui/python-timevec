@@ -1,5 +1,6 @@
 import datetime
 from collections.abc import Iterable
+from typing import Any
 
 import numpy as np
 import numpy.typing as npt
@@ -12,7 +13,7 @@ def long_time_vec(
     dt: np.datetime64,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the long time as a vector"""
     dt2 = datetime64_to_datetime(dt)
     range = util.long_time_range(dt2)
@@ -24,7 +25,7 @@ def millennium_vec(
     dt: np.datetime64,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the millennium as a vector"""
     dt2 = datetime64_to_datetime(dt)
     range = util.millennium_range(dt2)
@@ -36,10 +37,22 @@ def century_vec(
     dt: np.datetime64,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the century as a vector"""
     dt2 = datetime64_to_datetime(dt)
     range = util.century_range(dt2)
+    rate = range.time_elapsed_ratio(dt2)
+    return tvn.ratio_to_vec(rate, dtype=dtype)
+
+
+def decade_vec(
+    dt: np.datetime64,
+    *,
+    dtype: npt.DTypeLike = np.float64,
+) -> npt.NDArray[Any]:
+    """Represent the elapsed time in the decade as a vector"""
+    dt2 = datetime64_to_datetime(dt)
+    range = util.decade_range(dt2)
     rate = range.time_elapsed_ratio(dt2)
     return tvn.ratio_to_vec(rate, dtype=dtype)
 
@@ -48,7 +61,7 @@ def year_vec(
     dt: np.datetime64,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the year as a vector"""
     dt2 = datetime64_to_datetime(dt)
     range = util.year_range(dt2)
@@ -60,7 +73,7 @@ def month_vec(
     dt: np.datetime64,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the month as a vector"""
     dt2 = datetime64_to_datetime(dt)
     range = util.month_range(dt2)
@@ -72,7 +85,7 @@ def week_vec(
     dt: np.datetime64,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the week as a vector"""
     dt2 = datetime64_to_datetime(dt)
     range = util.week_range(dt2)
@@ -84,7 +97,7 @@ def day_vec(
     dt: np.datetime64,
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> npt.NDArray:
+) -> npt.NDArray[Any]:
     """Represent the elapsed time in the day as a vector"""
     dt2 = datetime64_to_datetime(dt)
     range = util.day_range(dt2)
@@ -98,13 +111,29 @@ def datetime64_to_datetime(dt: np.datetime64) -> datetime.datetime:
     ts = float(
         (dt64 - np.datetime64("1970-01-01T00:00:00")) / np.timedelta64(1, "s"),
     )
-    return datetime.datetime.utcfromtimestamp(ts)
+    try:
+        return datetime.datetime.fromtimestamp(
+            ts,
+            datetime.timezone.utc,
+        ).replace(tzinfo=None)
+    except (OSError, OverflowError, ValueError) as e:
+        raise ValueError(
+            "numpy.datetime64 value is outside the Python datetime range"
+            " (year 1-9999)",
+        ) from e
 
 
 def datetime_to_datetime64(dt: datetime.datetime) -> np.datetime64:
     """Convert a datetime.datetime to a numpy.datetime64"""
-    ts = dt.timestamp()
-    return np.datetime64("1970-01-01T00:00:00") + np.timedelta64(int(ts), "s")
+    if dt.tzinfo is None:
+        dt_utc = dt.replace(tzinfo=datetime.timezone.utc)
+    else:
+        dt_utc = dt
+    ts = dt_utc.timestamp()
+    return np.datetime64("1970-01-01T00:00:00") + np.timedelta64(
+        round(ts * 1_000_000),
+        "us",
+    )
 
 
 def datetime64_to_vecs(
@@ -112,14 +141,14 @@ def datetime64_to_vecs(
     targets: Iterable[util.TARGET],
     *,
     dtype: npt.DTypeLike = np.float64,
-) -> dict[util.TARGET, npt.NDArray]:
+) -> dict[util.TARGET, npt.NDArray[Any]]:
     """Convert a numpy.datetime64 to a vector"""
     dt2 = datetime64_to_datetime(dt)
     return tvn.datetime_to_vecs(dt2, targets, dtype=dtype)
 
 
 def datetime64_from_vecs(
-    items: dict[util.TARGET, npt.NDArray],
+    items: dict[util.TARGET, npt.NDArray[Any]],
 ) -> np.datetime64:
     """Convert a vector to a numpy.datetime64"""
     dt = tvn.datetime_from_vecs(items)
@@ -131,6 +160,7 @@ __all__ = [
     "datetime64_from_vecs",
     "datetime64_to_vecs",
     "day_vec",
+    "decade_vec",
     "long_time_vec",
     "millennium_vec",
     "month_vec",
