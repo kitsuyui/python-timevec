@@ -40,6 +40,14 @@ def test_date_time_range() -> None:
     assert range.total_time == datetime.timedelta(days=1)
 
 
+def test_date_time_range_inverted_raises() -> None:
+    """DateTimeRange with begin > end must raise ValueError."""
+    with pytest.raises(ValueError):
+        DateTimeRange(
+            datetime.datetime(2000, 1, 2), datetime.datetime(2000, 1, 1),
+        )
+
+
 def test_time_elapsed_ratio_rejects_zero_duration_range() -> None:
     """Test zero-duration DateTimeRange elapsed ratio contract."""
     instant = datetime.datetime(2000, 1, 1)
