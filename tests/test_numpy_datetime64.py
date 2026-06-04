@@ -8,6 +8,7 @@ import pytest
 
 import timevec.numpy as tv
 import timevec.numpy_datetime64 as tv64
+from timevec.numpy_datetime64 import datetime64_to_datetime
 
 
 @pytest.fixture
@@ -79,6 +80,24 @@ def test_day_vec() -> None:
     dt = datetime.datetime.now()
     dt64 = np.datetime64(dt)
     assert np.allclose(tv64.day_vec(dt64), tv.day_vec(dt))
+
+
+def test_datetime64_to_datetime_in_range() -> None:
+    # values within Python datetime range should succeed
+    assert datetime64_to_datetime(np.datetime64("2000-01-01T00:00:00")) == datetime.datetime(
+        2000, 1, 1, 0, 0, 0,
+    )
+    assert datetime64_to_datetime(np.datetime64("0001-01-01T00:00:00")) == datetime.datetime(
+        1, 1, 1, 0, 0, 0,
+    )
+
+
+def test_datetime64_to_datetime_out_of_range() -> None:
+    # values outside Python datetime range raise ValueError with a clear message
+    with pytest.raises(ValueError, match="outside the Python datetime range"):
+        datetime64_to_datetime(np.datetime64("10000-01-01"))
+    with pytest.raises(ValueError, match="outside the Python datetime range"):
+        datetime64_to_datetime(np.datetime64("0000-12-31"))
 
 
 def test_multiple_datetime64() -> None:
