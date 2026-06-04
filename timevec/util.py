@@ -20,6 +20,12 @@ class DateTimeRange:
     begin: datetime.datetime
     end: datetime.datetime
 
+    def __post_init__(self) -> None:
+        if self.begin > self.end:
+            raise ValueError(
+                f"begin must not be after end: {self.begin!r} > {self.end!r}",
+            )
+
     @property
     def total_time(self) -> datetime.timedelta:
         return self.end - self.begin
@@ -48,10 +54,14 @@ class DateTimeRange:
         return self.begin + self.elapsed_time_by_ratio(ratio)
 
     def time_elapsed_ratio(self, current: datetime.datetime) -> float:
-        return (
-            self.elapsed_time(current).total_seconds()
-            / self.total_time.total_seconds()
-        )
+        total_seconds = self.total_time.total_seconds()
+        if total_seconds == 0.0:
+            msg = (
+                "DateTimeRange.time_elapsed_ratio() requires a non-zero "
+                "duration"
+            )
+            raise ValueError(msg)
+        return self.elapsed_time(current).total_seconds() / total_seconds
 
     @property
     def end_of_first_quarter(self) -> datetime.datetime:
@@ -68,6 +78,21 @@ class DateTimeRange:
 
 BEGIN_OF_DATETIME = datetime.datetime(1, 1, 1, 0, 0, 0)
 END_OF_DATETIME = datetime.datetime.max
+_MAX_DATETIME_YEAR = datetime.datetime.max.year
+
+
+def _period_end(year: int) -> datetime.datetime:
+    """Return Jan 1 of year, or datetime.max when year exceeds 9999."""
+    if year > _MAX_DATETIME_YEAR:
+        return datetime.datetime.max
+    return datetime.datetime.min.replace(
+        year=year,
+        month=1,
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+    )
 
 
 def long_time_range(
@@ -92,14 +117,7 @@ def millennium_range(
         minute=0,
         second=0,
     )
-    end_of_millennium = datetime.datetime.min.replace(
-        year=(dt.year - 1) // 1000 * 1000 + 1001,
-        month=1,
-        day=1,
-        hour=0,
-        minute=0,
-        second=0,
-    )
+    end_of_millennium = _period_end((dt.year - 1) // 1000 * 1000 + 1001)
     return DateTimeRange(begin_of_millennium, end_of_millennium)
 
 
@@ -115,14 +133,7 @@ def century_range(
         minute=0,
         second=0,
     )
-    end_of_century = datetime.datetime.min.replace(
-        year=(dt.year - 1) // 100 * 100 + 101,
-        month=1,
-        day=1,
-        hour=0,
-        minute=0,
-        second=0,
-    )
+    end_of_century = _period_end((dt.year - 1) // 100 * 100 + 101)
     return DateTimeRange(begin_of_century, end_of_century)
 
 
@@ -139,14 +150,7 @@ def decade_range(
         minute=0,
         second=0,
     )
-    end_of_decade = datetime.datetime.min.replace(
-        year=decade_start_year + 10,
-        month=1,
-        day=1,
-        hour=0,
-        minute=0,
-        second=0,
-    )
+    end_of_decade = _period_end(decade_start_year + 10)
     return DateTimeRange(begin_of_decade, end_of_decade)
 
 
@@ -162,14 +166,7 @@ def year_range(
         minute=0,
         second=0,
     )
-    end_of_year = datetime.datetime.min.replace(
-        year=dt.year + 1,
-        month=1,
-        day=1,
-        hour=0,
-        minute=0,
-        second=0,
-    )
+    end_of_year = _period_end(dt.year + 1)
     return DateTimeRange(begin_of_year, end_of_year)
 
 

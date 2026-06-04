@@ -139,3 +139,8 @@ def test_edge_cases() -> None:
     dt = datetime.datetime(2023, 1, 31, 23, 59, 59, 999999)
     vec = tvn.month_vec(dt)
     assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-5)
+
+
+def test_vec_to_ratio_zero_vector_raises() -> None:
+    with pytest.raises(ValueError):
+        tvn.vec_to_ratio(np.array([0.0, 0.0]))
