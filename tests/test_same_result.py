@@ -26,8 +26,16 @@ def assert_same(
     result1 = func1(dt)
     result2 = func2(dt)
     result3 = func3(np.datetime64(dt))
-    assert pytest.approx(result1[0], rel=rel_tol, abs=abs_tol) == result2[0] == result3[0]
-    assert pytest.approx(result1[1], rel=rel_tol, abs=abs_tol) == result2[1] == result3[1]
+    assert (
+        pytest.approx(result1[0], rel=rel_tol, abs=abs_tol)
+        == result2[0]
+        == result3[0]
+    )
+    assert (
+        pytest.approx(result1[1], rel=rel_tol, abs=abs_tol)
+        == result2[1]
+        == result3[1]
+    )
 
 
 def random_date() -> datetime.datetime:
@@ -49,13 +57,23 @@ def random_dates(size: int = 2000) -> list[datetime.datetime]:
 def test_long_time_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:
-        assert_same(dt, tv.long_time_vec, tvn.long_time_vec, tv64.long_time_vec)
+        assert_same(
+            dt,
+            tv.long_time_vec,
+            tvn.long_time_vec,
+            tv64.long_time_vec,
+        )
 
 
 def test_millennium_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:
-        assert_same(dt, tv.millennium_vec, tvn.millennium_vec, tv64.millennium_vec)
+        assert_same(
+            dt,
+            tv.millennium_vec,
+            tvn.millennium_vec,
+            tv64.millennium_vec,
+        )
 
 
 def test_century_vec() -> None:
