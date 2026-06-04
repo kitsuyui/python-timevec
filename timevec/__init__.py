@@ -30,3 +30,4 @@ with contextlib.suppress(ImportError):
 
 
 __all__ = ["__version__", "builtin_math", "numpy", "numpy_datetime64"]
+__all__ = [n for n in __all__ if n in globals()]
