@@ -15,18 +15,38 @@ it is desirable that the value is close to 00:00 on the next day.
 To achieve this, the time is represented as a combination of cos and sin."""
 
 # https://packaging-guide.openastronomy.org/en/latest/advanced/versioning.html
-import contextlib
+import warnings
 
 from ._version import __version__
 
-with contextlib.suppress(ImportError):
+try:
     from . import builtin_math
+except ModuleNotFoundError:
+    pass
+except ImportError as e:
+    warnings.warn(
+        f"timevec.builtin_math could not be imported: {e}",
+        ImportWarning,
+        stacklevel=2,
+    )
 
-with contextlib.suppress(ImportError):
+try:
+    # numpy_datetime64 depends on timevec.numpy, so both must be loaded
+    # together or not at all. Import them under a single guard to make the
+    # dependency explicit in the module structure.
     from . import (
         numpy,
-        numpy_datetime64,  # depends on timevec.numpy
+        numpy_datetime64,
+    )
+except ModuleNotFoundError:
+    pass
+except ImportError as e:
+    warnings.warn(
+        f"timevec.numpy / timevec.numpy_datetime64 could not be imported: {e}",
+        ImportWarning,
+        stacklevel=2,
     )
 
 
 __all__ = ["__version__", "builtin_math", "numpy", "numpy_datetime64"]
+__all__ = [n for n in __all__ if n in globals()]

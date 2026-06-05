@@ -49,10 +49,12 @@ def assert_range_vector_value(
     assert fn(range.begin) == pytest.approx((1.0, 0.0), abs=abs)
     assert fn(range.end_of_first_quarter) == pytest.approx((0.0, 1.0), abs=abs)
     assert fn(range.end_of_second_quarter) == pytest.approx(
-        (-1.0, 0.0), abs=abs,
+        (-1.0, 0.0),
+        abs=abs,
     )
     assert fn(range.end_of_third_quarter) == pytest.approx(
-        (0.0, -1.0), abs=abs,
+        (0.0, -1.0),
+        abs=abs,
     )
     assert fn(range.end) == pytest.approx((1.0, 0.0), abs=abs)
 
@@ -196,3 +198,13 @@ def test_edge_cases() -> None:
 def test_vec_to_ratio_zero_vector_raises() -> None:
     with pytest.raises(ValueError):
         tv.vec_to_ratio(0.0, 0.0)
+
+
+def test_datetime_from_vecs_empty_raises() -> None:
+    with pytest.raises(ValueError, match="No recognized time targets"):
+        tv.datetime_from_vecs({})
+
+
+def test_datetime_from_vecs_unrecognized_keys_raises() -> None:
+    with pytest.raises(ValueError, match="No recognized time targets"):
+        tv.datetime_from_vecs({"unknown_key": (0.5, 0.5)})  # type: ignore[dict-item]

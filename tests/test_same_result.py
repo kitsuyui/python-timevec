@@ -4,8 +4,10 @@ from __future__ import annotations
 import datetime
 import random
 from collections.abc import Callable
+from typing import Any
 
 import numpy as np
+import numpy.typing as npt
 import pytest
 
 import timevec.builtin_math as tv
@@ -16,8 +18,8 @@ import timevec.numpy_datetime64 as tv64
 def assert_same(
     dt: datetime.datetime,
     func1: Callable[[datetime.datetime], tuple[float, float]],
-    func2: Callable[[datetime.datetime], np.ndarray],
-    func3: Callable[[np.datetime64], np.ndarray],
+    func2: Callable[[datetime.datetime], npt.NDArray[Any]],
+    func3: Callable[[np.datetime64], npt.NDArray[Any]],
     *,
     rel_tol: float = 1e-9,
     abs_tol: float = 0.0,
@@ -58,7 +60,10 @@ def test_long_time_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:
         assert_same(
-            dt, tv.long_time_vec, tvn.long_time_vec, tv64.long_time_vec,
+            dt,
+            tv.long_time_vec,
+            tvn.long_time_vec,
+            tv64.long_time_vec,
         )
 
 
@@ -66,7 +71,10 @@ def test_millennium_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:
         assert_same(
-            dt, tv.millennium_vec, tvn.millennium_vec, tv64.millennium_vec,
+            dt,
+            tv.millennium_vec,
+            tvn.millennium_vec,
+            tv64.millennium_vec,
         )
 
 

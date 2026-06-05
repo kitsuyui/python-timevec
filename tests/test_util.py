@@ -40,6 +40,14 @@ def test_date_time_range() -> None:
     assert range.total_time == datetime.timedelta(days=1)
 
 
+def test_date_time_range_inverted_raises() -> None:
+    """DateTimeRange with begin > end must raise ValueError."""
+    with pytest.raises(ValueError):
+        DateTimeRange(
+            datetime.datetime(2000, 1, 2), datetime.datetime(2000, 1, 1),
+        )
+
+
 def test_time_elapsed_ratio_rejects_zero_duration_range() -> None:
     """Test zero-duration DateTimeRange elapsed ratio contract."""
     instant = datetime.datetime(2000, 1, 1)
@@ -120,3 +128,35 @@ def test_day_range() -> None:
     assert range.begin == datetime.datetime(2000, 1, 1)
     assert range.end == datetime.datetime(2000, 1, 2)
     assert range.total_time == datetime.timedelta(days=1)
+
+
+def test_year_range_near_datetime_max() -> None:
+    """year_range must not raise ValueError for datetime.max year."""
+    range = year_range(datetime.datetime(9999, 1, 1))
+    assert range.begin == datetime.datetime(9999, 1, 1)
+    assert range.end == datetime.datetime.max
+    assert range.begin < range.end
+
+
+def test_decade_range_near_datetime_max() -> None:
+    """decade_range must not raise ValueError near datetime.max."""
+    range = decade_range(datetime.datetime(9999, 1, 1))
+    assert range.begin.year == 9991
+    assert range.end == datetime.datetime.max
+    assert range.begin < range.end
+
+
+def test_century_range_near_datetime_max() -> None:
+    """century_range must not raise ValueError near datetime.max."""
+    range = century_range(datetime.datetime(9999, 1, 1))
+    assert range.begin.year == 9901
+    assert range.end == datetime.datetime.max
+    assert range.begin < range.end
+
+
+def test_millennium_range_near_datetime_max() -> None:
+    """millennium_range must not raise ValueError near datetime.max."""
+    range = millennium_range(datetime.datetime(9999, 1, 1))
+    assert range.begin.year == 9001
+    assert range.end == datetime.datetime.max
+    assert range.begin < range.end
