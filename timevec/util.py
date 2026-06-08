@@ -77,7 +77,7 @@ class DateTimeRange:
 
 
 BEGIN_OF_DATETIME = datetime.datetime(1, 1, 1, 0, 0, 0)
-END_OF_DATETIME = datetime.datetime(5001, 1, 1, 0, 0, 0)
+END_OF_DATETIME = datetime.datetime.max
 _MAX_DATETIME_YEAR = datetime.datetime.max.year
 
 
@@ -98,7 +98,7 @@ def _period_end(year: int) -> datetime.datetime:
 def long_time_range(
     _dt: datetime.datetime,
 ) -> DateTimeRange:
-    """Return a DateTimeRange that covers a long time period"""
+    """Return a DateTimeRange that covers all representable datetimes"""
     return DateTimeRange(
         begin=BEGIN_OF_DATETIME,
         end=END_OF_DATETIME,

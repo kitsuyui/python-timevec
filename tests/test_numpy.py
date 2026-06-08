@@ -11,7 +11,7 @@ def test_long_time_vec() -> None:
     vec = tvn.long_time_vec(dt)
     assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
 
-    dt = datetime.datetime(5001, 1, 1, 0, 0, 0)
+    dt = datetime.datetime.max
     vec = tvn.long_time_vec(dt)
     assert vec == pytest.approx(np.array([1.0, 0.0]), abs=1e-6)
 

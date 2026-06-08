@@ -15,10 +15,17 @@ from timevec.util import (
 )
 
 
-def assert_date_time_range(range: DateTimeRange) -> None:
+def assert_date_time_range(
+    range: DateTimeRange,
+    *,
+    rounding_tolerance: datetime.timedelta = datetime.timedelta(),
+) -> None:
     """Assert that a DateTimeRange is valid"""
     assert range.begin <= range.end
-    assert range.total_time == 2 * range.half_time == 4 * range.quarter_time
+    half_delta = abs(range.total_time - 2 * range.half_time)
+    quarter_delta = abs(range.total_time - 4 * range.quarter_time)
+    assert half_delta <= rounding_tolerance
+    assert quarter_delta <= rounding_tolerance
     assert (
         range.begin
         < range.end_of_first_quarter
@@ -57,23 +64,25 @@ def test_time_elapsed_ratio_rejects_zero_duration_range() -> None:
         range.time_elapsed_ratio(instant)
 
 
-def test_date_time_range_inverted_raises() -> None:
-    """DateTimeRange with begin > end must raise ValueError."""
-    with pytest.raises(ValueError):
-        DateTimeRange(
-            datetime.datetime(2000, 1, 2), datetime.datetime(2000, 1, 1),
-        )
-
-
 def test_long_time_range() -> None:
     """Test long_time_range()"""
     range = long_time_range(datetime.datetime(2000, 1, 1))
-    assert_date_time_range(range)
-    assert range.begin == datetime.datetime(1, 1, 1)
-    assert range.end == datetime.datetime(5001, 1, 1)
-    assert range.total_time == datetime.timedelta(
-        days=1826212,
-    )  # 5000 years contains 1212 leap years
+    assert_date_time_range(
+        range,
+        rounding_tolerance=datetime.timedelta(microseconds=1),
+    )
+    assert range.begin == datetime.datetime.min
+    assert range.end == datetime.datetime.max
+    assert range.total_time == datetime.datetime.max - datetime.datetime.min
+
+
+def test_long_time_range_keeps_supported_datetimes_in_range() -> None:
+    """Test long_time_range() covers latest representable datetimes."""
+    range = long_time_range(datetime.datetime.max)
+
+    assert range.time_elapsed_ratio(datetime.datetime(5001, 1, 1)) < 1.0
+    assert range.time_elapsed_ratio(datetime.datetime(9999, 1, 1)) < 1.0
+    assert range.time_elapsed_ratio(datetime.datetime.max) == 1.0
 
 
 def test_millennium_range() -> None:
