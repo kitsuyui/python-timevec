@@ -31,23 +31,18 @@ except ImportError as e:
     )
 
 try:
-    from . import numpy_datetime64
-except ModuleNotFoundError:
-    pass
-except ImportError as e:
-    warnings.warn(
-        f"timevec.numpy_datetime64 could not be imported: {e}",
-        ImportWarning,
-        stacklevel=2,
+    # numpy_datetime64 depends on timevec.numpy, so both must be loaded
+    # together or not at all. Import them under a single guard to make the
+    # dependency explicit in the module structure.
+    from . import (
+        numpy,
+        numpy_datetime64,
     )
-
-try:
-    from . import numpy
 except ModuleNotFoundError:
     pass
 except ImportError as e:
     warnings.warn(
-        f"timevec.numpy could not be imported: {e}",
+        f"timevec.numpy / timevec.numpy_datetime64 could not be imported: {e}",
         ImportWarning,
         stacklevel=2,
     )
