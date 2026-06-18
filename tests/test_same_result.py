@@ -1,6 +1,7 @@
 # Test if the function implemented with numpy and the function implemented with builtin math return the same result.
 from __future__ import annotations
 
+import calendar
 import datetime
 import random
 from collections.abc import Callable
@@ -44,7 +45,8 @@ def random_date() -> datetime.datetime:
     """Return a random datetime between 1990-01-01 and 2030-12-31."""
     year = random.randint(1990, 2030)
     month = random.randint(1, 12)
-    day = random.randint(1, 28)
+    _, last_day = calendar.monthrange(year, month)
+    day = random.randint(1, last_day)
     hour = random.randint(0, 23)
     minute = random.randint(0, 59)
     second = random.randint(0, 59)
@@ -94,6 +96,19 @@ def test_month_vec() -> None:
     test_dates = random_dates()
     for dt in test_dates:
         assert_same(dt, tv.month_vec, tvn.month_vec, tv64.month_vec)
+
+
+@pytest.mark.parametrize(
+    "dt",
+    [
+        datetime.datetime(2000, 1, 31, 23, 59, 59),  # 31-day month end
+        datetime.datetime(2000, 4, 30, 23, 59, 59),  # 30-day month end
+        datetime.datetime(2000, 2, 29, 23, 59, 59),  # leap year Feb end
+        datetime.datetime(2001, 2, 28, 23, 59, 59),  # non-leap year Feb end
+    ],
+)
+def test_month_vec_at_month_end(dt: datetime.datetime) -> None:
+    assert_same(dt, tv.month_vec, tvn.month_vec, tv64.month_vec)
 
 
 def test_week_vec() -> None:
