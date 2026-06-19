@@ -66,5 +66,5 @@ def test_many_dates() -> None:
         vecs7 = tv64.datetime64_to_vecs(np.datetime64(dt), minimal)
         tv64.datetime64_from_vecs(vecs7)
 
-    # tested up to 2100-01-01
+    # tested beyond 2400-01-01
     assert dt >= datetime.datetime(2400, 1, 1, 0, 0, 0)
