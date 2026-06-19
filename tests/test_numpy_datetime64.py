@@ -10,6 +10,8 @@ import timevec.numpy as tv
 import timevec.numpy_datetime64 as tv64
 from timevec.numpy_datetime64 import datetime64_to_datetime
 
+FIXED_DATETIME = datetime.datetime(2024, 1, 2, 3, 4, 5, 123456)
+
 
 @pytest.fixture
 def timezone() -> Iterator[None]:
@@ -41,43 +43,43 @@ def test_datetime_to_datetime64_preserves_microseconds() -> None:
 
 
 def test_long_time_vec() -> None:
-    dt = datetime.datetime.now()
+    dt = FIXED_DATETIME
     dt64 = np.datetime64(dt)
     assert np.allclose(tv64.long_time_vec(dt64), tv.long_time_vec(dt))
 
 
 def test_millennium_vec() -> None:
-    dt = datetime.datetime.now()
+    dt = FIXED_DATETIME
     dt64 = np.datetime64(dt)
     assert np.allclose(tv64.millennium_vec(dt64), tv.millennium_vec(dt))
 
 
 def test_century_vec() -> None:
-    dt = datetime.datetime.now()
+    dt = FIXED_DATETIME
     dt64 = np.datetime64(dt)
     assert np.allclose(tv64.century_vec(dt64), tv.century_vec(dt))
 
 
 def test_year_vec() -> None:
-    dt = datetime.datetime.now()
+    dt = FIXED_DATETIME
     dt64 = np.datetime64(dt)
     assert np.allclose(tv64.year_vec(dt64), tv.year_vec(dt))
 
 
 def test_month_vec() -> None:
-    dt = datetime.datetime.now()
+    dt = FIXED_DATETIME
     dt64 = np.datetime64(dt)
     assert np.allclose(tv64.month_vec(dt64), tv.month_vec(dt))
 
 
 def test_week_vec() -> None:
-    dt = datetime.datetime.now()
+    dt = FIXED_DATETIME
     dt64 = np.datetime64(dt)
     assert np.allclose(tv64.week_vec(dt64), tv.week_vec(dt))
 
 
 def test_day_vec() -> None:
-    dt = datetime.datetime.now()
+    dt = FIXED_DATETIME
     dt64 = np.datetime64(dt)
     assert np.allclose(tv64.day_vec(dt64), tv.day_vec(dt))
 
@@ -101,7 +103,7 @@ def test_datetime64_to_datetime_out_of_range() -> None:
 
 
 def test_multiple_datetime64() -> None:
-    dt = datetime.datetime.now()
+    dt = FIXED_DATETIME
     dt64 = np.datetime64(dt)
     vec = np.array([dt64, dt64, dt64], dtype=np.datetime64)
     assert vec.shape == (3,)
