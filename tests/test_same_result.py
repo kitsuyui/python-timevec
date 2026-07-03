@@ -16,6 +16,11 @@ import timevec.numpy as tvn
 import timevec.numpy_datetime64 as tv64
 
 
+@pytest.fixture(autouse=True)
+def _seed_random() -> None:
+    random.seed(0)
+
+
 def assert_same(
     dt: datetime.datetime,
     func1: Callable[[datetime.datetime], tuple[float, float]],
