@@ -133,3 +133,15 @@ def test_datetime_to_datetime64_is_timezone_independent() -> None:
     tokyo_result = tv64.datetime_to_datetime64(dt)
 
     assert utc_result == tokyo_result == np.datetime64("2024-01-01T12:00:00")
+
+
+def test_datetime64_from_vecs_empty_raises() -> None:
+    with pytest.raises(ValueError, match="No recognized time targets"):
+        tv64.datetime64_from_vecs({})
+
+
+def test_datetime64_from_vecs_unrecognized_keys_raises() -> None:
+    with pytest.raises(ValueError, match="No recognized time targets"):
+        tv64.datetime64_from_vecs(
+            {"unknown_key": np.array([0.5, 0.5])},  # type: ignore[dict-item]
+        )
