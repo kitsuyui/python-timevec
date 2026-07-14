@@ -182,9 +182,20 @@ def datetime_to_vecs(
 def datetime_from_vecs(
     items: dict[util.TARGET, npt.NDArray[Any]],
 ) -> datetime.datetime:
-    """Convert a vector to a datetime"""
+    """Convert a vector to a datetime.
+
+    Raises:
+        ValueError: If no recognized time targets are present in *items*.
+    """
+    ranges = list(present_numpy_ranges(items))
+    if not ranges:
+        valid = [target for target, _ in NUMPY_RANGE_FACTORIES]
+        raise ValueError(
+            f"No recognized time targets in items. "
+            f"Expected one or more of {valid}; got {list(items.keys())}.",
+        )
     t = util.BEGIN_OF_DATETIME
-    for range_factory, value in present_numpy_ranges(items):
+    for range_factory, value in ranges:
         range = range_factory(t)
         t = range.current_time_by_ratio(vec_to_ratio(value))
     return t
