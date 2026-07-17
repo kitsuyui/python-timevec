@@ -177,3 +177,11 @@ def test_millennium_range_near_datetime_max() -> None:
     assert range.begin.year == 9001
     assert range.end == datetime.datetime.max
     assert range.begin < range.end
+
+
+def test_week_range_near_datetime_max() -> None:
+    """week_range must clamp its end near datetime.max."""
+    range = week_range(datetime.datetime(9999, 12, 31))
+    assert range.begin == datetime.datetime(9999, 12, 27)
+    assert range.end == datetime.datetime.max
+    assert range.begin < range.end

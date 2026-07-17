@@ -198,22 +198,19 @@ def week_range(
     dt: datetime.datetime,
 ) -> DateTimeRange:
     """Return a DateTimeRange that covers a week"""
-    begin_of_week = datetime.datetime.min.replace(
+    day_start = datetime.datetime.min.replace(
         year=dt.year,
         month=dt.month,
         day=dt.day,
         hour=0,
         minute=0,
         second=0,
-    ) - datetime.timedelta(days=dt.weekday())
-    end_of_week = datetime.datetime.min.replace(
-        year=dt.year,
-        month=dt.month,
-        day=dt.day,
-        hour=0,
-        minute=0,
-        second=0,
-    ) + datetime.timedelta(days=7 - dt.weekday())
+    )
+    begin_of_week = day_start - datetime.timedelta(days=dt.weekday())
+    try:
+        end_of_week = day_start + datetime.timedelta(days=7 - dt.weekday())
+    except OverflowError:
+        end_of_week = END_OF_DATETIME
     return DateTimeRange(begin_of_week, end_of_week)
 
 
