@@ -1196,6 +1196,7 @@ dev = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "ruff" },
+    { name = "setuptools" },
     { name = "setuptools-scm" },
 ]
 
@@ -1212,6 +1213,7 @@ dev = [
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "ruff" },
+    { name = "setuptools" },
     { name = "setuptools-scm" },
 ]
 
